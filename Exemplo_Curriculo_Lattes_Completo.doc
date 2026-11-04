@@ -1,0 +1,138 @@
+﻿<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset="utf-8">
+<title>Currículo Lattes — Dr. Rafael Henrique Albuquerque Mendes</title>
+<style>
+  @page { size: 21cm 29.7cm; margin: 1.8cm 1.8cm 1.8cm 1.8cm; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #111111; line-height: 1.42; }
+  .topbar { background-color: #1c3d6e; color: #ffffff; padding: 6pt 10pt; font-weight: bold; font-size: 11pt; }
+  .meta { font-size: 8.5pt; color: #333333; border-bottom: 1pt solid #cbd5e1; padding: 5pt 0; margin-bottom: 8pt; }
+  h1 { font-size: 15pt; color: #1c3d6e; margin: 4pt 0 2pt 0; }
+  .contact { font-size: 8.8pt; color: #333333; margin-bottom: 8pt; }
+  h2 { font-size: 10pt; font-weight: bold; background-color: #dfe8f3; color: #1c3d6e; border-top: 1.5pt solid #1c3d6e; border-bottom: 1pt solid #94a3b8; padding: 3pt 6pt; margin: 12pt 0 6pt 0; }
+  .note { font-size: 8pt; color: #555555; font-style: italic; margin-top: 2pt; }
+  table.grid { width: 100%; border-collapse: collapse; margin-bottom: 4pt; }
+  table.grid td { vertical-align: top; padding: 2.5pt 4pt; font-size: 9.2pt; }
+  table.grid td.lbl { width: 28%; font-weight: bold; color: #1c3d6e; }
+  .inst-bar { background-color: #f1f5f9; border-left: 3pt solid #1c3d6e; padding: 3pt 6pt; font-weight: bold; color: #1c3d6e; margin: 6pt 0 3pt 0; font-size: 9.5pt; }
+  ul, ol { margin: 2pt 0 6pt 16pt; padding: 0; }
+  li { margin-bottom: 3.5pt; font-size: 9.2pt; }
+</style>
+</head>
+<body>
+  <div class="topbar">Sistema de Currículos Lattes (CNPq) — Currículo Acadêmico Completo</div>
+  <div class="meta">
+    Endereço para acessar este CV: <b>http://lattes.cnpq.br/8492017492038471</b> &nbsp;|&nbsp;
+    ID Lattes: <b>8492017492038471</b> &nbsp;|&nbsp;
+    Última atualização do currículo em <b>02/11/2026</b>
+  </div>
+
+  <h1>Dr. Rafael Henrique Albuquerque Mendes</h1>
+  <div class="contact">São Paulo, SP · Tel: (11) 98412-7730 · E-mail: rafael.mendes.pesquisa@usp.br · ORCID: https://orcid.org/0000-0002-8492-1940</div>
+
+  <h2>Resumo</h2>
+  <p>Possui graduação em Biotecnologia pela Universidade Federal de Minas Gerais (2018), mestrado em Ciências Biológicas (Biologia Molecular) pela Universidade Estadual de Campinas (2021) e doutorado em Biotecnologia e Bioinformática pela Universidade de São Paulo (2025), com período sanduíche no Broad Institute of MIT and Harvard (Bolsista CAPES/PDSE). Atualmente é pesquisador de Pós-Doutorado (Bolsista FAPESP) na Universidade de São Paulo e docente colaborador na pós-graduação. Tem experiência na área de Genética, Bioinformática e Inteligência Artificial Aplicada à Saúde, atuando principalmente nos seguintes temas: sequenciamento de nova geração (NGS), transcriptômica espacial, biomarcadores oncológicos e aprendizado de máquina.</p>
+  <p class="note">(Texto informado pelo autor)</p>
+
+  <h2>Identificação</h2>
+  <table class="grid">
+    <tr><td class="lbl">Nome</td><td>Dr. Rafael Henrique Albuquerque Mendes</td></tr>
+    <tr><td class="lbl">Nome em citações bibliográficas</td><td>MENDES, R. H. A.; MENDES, Rafael Henrique Albuquerque; ALBUQUERQUE MENDES, R. H.</td></tr>
+    <tr><td class="lbl">Lattes iD</td><td>http://lattes.cnpq.br/8492017492038471</td></tr>
+    <tr><td class="lbl">ORCID iD</td><td>https://orcid.org/0000-0002-8492-1940</td></tr>
+  </table>
+
+  <h2>Endereço</h2>
+  <table class="grid">
+    <tr><td class="lbl">Endereço Profissional</td><td>Universidade de São Paulo (USP), Instituto de Ciências Biomédicas e Biotecnologia. Av. Prof. Lineu Prestes, 1524 - Butantã, CEP 05508-000 - São Paulo, SP - Brasil.</td></tr>
+  </table>
+
+  <h2>Formação acadêmica/titulação</h2>
+  <table class="grid">
+    
+      <tr>
+        <td class="lbl">2021 - 2025</td>
+        <td>
+          <b>Doutorado em Biotecnologia e Bioinformática</b><br/>
+          Universidade de São Paulo (USP), São Paulo, Brasil<br/>
+          • Período sanduíche no Broad Institute of MIT and Harvard (Orientador no exterior: Dr. Eric Lander).<br/>• Título da Tese: Integração de Transcriptômica Espacial e Aprendizado Profundo para Predição de Resposta Imunoterápica em Carcinomas.<br/>• Orientador(a): Profa. Dra. Helena Maria de Vasconcelos.<br/>• Bolsista do(a): Fundação de Amparo à Pesquisa do Estado de São Paulo (FAPESP), Processo nº 2021/09842-3.<br/>• Palavras-chave: Bioinformática; Transcriptômica; Aprendizado de Máquina; Oncologia Molecular.
+        </td>
+      </tr>
+      <tr>
+        <td class="lbl">2019 - 2021</td>
+        <td>
+          <b>Mestrado em Ciências Biológicas (Biologia Molecular) — Conceito CAPES 7</b><br/>
+          Universidade Estadual de Campinas (UNICAMP), Campinas, Brasil<br/>
+          • Título da Dissertação: Análise de Redes Gênicas Reguladoras em Linhagens Celulares Resistentes a Quimioterápicos.<br/>• Orientador(a): Prof. Dr. Carlos Eduardo Nogueira.<br/>• Bolsista do(a): Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq).
+        </td>
+      </tr>
+      <tr>
+        <td class="lbl">2014 - 2018</td>
+        <td>
+          <b>Graduação em Biotecnologia</b><br/>
+          Universidade Federal de Minas Gerais (UFMG), Belo Horizonte, Brasil<br/>
+          • Título do Trabalho de Conclusão de Curso: Pipeline Automatizado em Python e R para Controle de Qualidade de Dados de RNA-Seq.<br/>• Orientador(a): Profa. Dra. Luciana Ribeiro Campos.<br/>• Bolsista de Iniciação Científica (PIBIC/CNPq - 2015 a 2018).
+        </td>
+      </tr>
+  </table>
+
+  <h2>Atuação Profissional</h2>
+  
+    <div class="inst-bar">Universidade de São Paulo (USP), Brasil</div>
+    <table class="grid">
+      <tr>
+        <td class="lbl">2025 - Atual</td>
+        <td>
+          <b>Vínculo institucional:</b> Bolsista de Pós-Doutorado (FAPESP), Dedicação Exclusiva (40h)<br/>
+          <b>Atividades exercidas:</b><br/>
+          • Pesquisa e desenvolvimento no Laboratório de Genômica Computacional e Medicina de Precisão.<br/>• Coorientação de 3 alunos de Mestrado e 2 alunos de Iniciação Científica (PIBIC).<br/>• Docência na disciplina de pós-graduação BMM-5820: Métodos Computacionais em Biologia Sistêmica.
+        </td>
+      </tr>
+    </table>
+    <div class="inst-bar">Hospital Israelita Albert Einstein — Instituto de Pesquisa, Brasil</div>
+    <table class="grid">
+      <tr>
+        <td class="lbl">2020 - 2021</td>
+        <td>
+          <b>Vínculo institucional:</b> Pesquisador Bioinformata Júnior (CLT, 40h)<br/>
+          <b>Atividades exercidas:</b><br/>
+          • Processamento e análise estatística de coortes clínicas de sequenciamento exômico e RNA-Seq.<br/>• Desenvolvimento de relatórios automatizados de variantes genômicas para suporte à decisão clínica.<br/>• Validação de pipelines em ambientes de computação em nuvem (AWS / Linux HPC).
+        </td>
+      </tr>
+    </table>
+    <div class="inst-bar">Universidade Federal de Minas Gerais (UFMG), Brasil</div>
+    <table class="grid">
+      <tr>
+        <td class="lbl">2016 - 2018</td>
+        <td>
+          <b>Vínculo institucional:</b> Monitor de Graduação e Bolsista de Iniciação Científica (PIBIC/CNPq, 20h)<br/>
+          <b>Atividades exercidas:</b><br/>
+          • Monitoria acadêmica nas disciplinas de Bioestatística e Genética Molecular.<br/>• Execução de experimentos de extração de ácidos nucleicos, PCR em tempo real (qPCR) e análise de dados.
+        </td>
+      </tr>
+    </table>
+
+  <h2>Projetos de pesquisa</h2>
+  <ul><li>2024 - Atual: Atlas Multi-Ômico de Tumores Sólidos na População Brasileira (Financiador: FAPESP / Ministério da Saúde). Função: Pesquisador Principal Adjunto.</li><li>2021 - 2024: Modelos Preditivos Baseados em IA para Diagnóstico Precoce em Oncologia (Financiador: CNPq Universal). Função: Doutorando Integrante.</li></ul>
+
+  <h2>Áreas de atuação</h2>
+  <ul><li>1. Grande área: Ciências Biológicas / Área: Genética / Subárea: Genética Humana e Médica / Especialidade: Bioinformática.</li><li>2. Grande área: Ciências Exatas e da Terra / Área: Ciência da Computação / Subárea: Aprendizado de Máquina Aplicado à Saúde.</li></ul>
+
+  <h2>Idiomas</h2>
+  <table class="grid">
+    <tr><td class="lbl">Inglês</td><td>Compreende Bem, Fala Bem, Lê Bem, Escreve Bem (Certificação TOEFL iBT</td></tr><tr><td class="lbl">Espanhol</td><td>Compreende Bem, Fala Razoavelmente, Lê Bem, Escreve Razoavelmente.</td></tr><tr><td class="lbl">Francês</td><td>Compreende Pouco, Fala Pouco, Lê Razoavelmente, Escreve Pouco.</td></tr><tr><td class="lbl">Português</td><td>Compreende Bem, Fala Bem, Lê Bem, Escreve Bem (Língua Materna).</td></tr>
+  </table>
+
+  <h2>Prêmios e títulos</h2>
+  <ul><li>2025: Prêmio Tese Destaque USP na área de Ciências Biológicas e Saúde, Universidade de São Paulo.</li><li>2023: Best Poster Award — ISMB / ECCB International Conference on Intelligent Systems for Molecular Biology.</li><li>2018: Destaque Acadêmico de Iniciação Científica (Semana do Conhecimento), UFMG.</li></ul>
+
+  <h2>Produções — Produção bibliográfica (Artigos completos publicados em periódicos)</h2>
+  <ul><li>1. MENDES, R. H. A.; VASCONCELOS, H. M.; LANDER, E. S. Spatial transcriptomics and deep graph networks reveal immunotherapy response signatures in solid tumors. NATURE BIOTECHNOLOGY, v. 43, p. 412-425, 2025. (Qualis A1 · DOI: 10.1038/s41587-025-0001-x).</li><li>2. MENDES, R. H. A.; NOGUEIRA, C. E.; SILVA, P. R. Transcriptomic landscape of chemoresistance in triple-negative breast cancer cell lines. BIOINFORMATICS, v. 38, p. 1890-1898, 2022. (Qualis A1).</li><li>3. CAMPOS, L. R.; MENDES, R. H. A.; OLIVEIRA, T. M. Automated quality control and normalization workflows for clinical RNA-Seq datasets in Brazilian cohorts. GENETICS AND MOLECULAR BIOLOGY, v. 44, p. e20200312, 2021. (Qualis A2).</li><li>4. MENDES, R. H. A.; VASCONCELOS, H. M. Machine learning biomarkers in precision oncology: a systematic review and meta-analysis. FRONTIERS IN GENETICS, v. 14, p. 112049, 2023. (Qualis A1).</li></ul>
+
+  <h2>Trabalhos completos publicados em anais de congressos</h2>
+  <ul><li>1. MENDES, R. H. A.; VASCONCELOS, H. M. Deep learning integration of single-cell and spatial RNA-seq. In: 69º Congresso Brasileiro de Genética (SBG), 2024, Águas de Lindóia. Anais do 69º CBG, 2024.</li><li>2. MENDES, R. H. A.; NOGUEIRA, C. E. Gene regulatory networks in drug resistance. In: X-Meeting — International Conference of the Brazilian Association for Bioinformatics and Computational Biology (AB3C), 2021, São Paulo.</li></ul>
+
+  <h2>Orientações e Participação em Bancas</h2>
+  <ul><li>1. Orientação concluída (Iniciação Científica): Mariana Costa Silva. Predição de neoantígenos tumorais via redes neurais. 2024. Iniciação Científica (Biotecnologia) - Universidade de São Paulo, Bolsista CNPq.</li><li>2. Participação em banca de Mestrado: Lucas Gabriel Ferreira. Análise de variantes somáticas em leucemias agudas. 2025. Dissertação (Mestrado em Oncologia) - Faculdade de Medicina da USP.</li></ul>
+</body>
+</html>

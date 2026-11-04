@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapta Currículo — Envie seu currículo. Saia aprovado.</title>
+  <meta name="description" content="Adapte seu currículo para qualquer vaga: formato ATS oficial para robôs de recrutamento e padrão Lattes CNPq." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20261104_1555" />
+  <script>
+    if (window.history && 'scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+    if (window.location.hash && !window.location.hash.startsWith('#cv=') && window.location.hash !== '#admin') {
+      try { window.history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search + '#home'); } catch (e) { window.location.hash = '#home'; }
+    }
+  </script>
+  <!-- App instalável (atalho na tela inicial) -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0F2A44" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Adapta Currículo" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+</head>
+<body>
+  <!-- Cabeçalho -->
+  <header class="topbar">
+    <a class="logo" href="#" data-go="home">
+      <span class="logo-symbol" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3H14L18 7V20C18 20.5523 17.5523 21 17 21H6C5.44772 21 5 20.5523 5 20V4C5 3.44772 5.44772 3 6 3Z" fill="#FFFFFF"/>
+          <path d="M14 3V7H18" fill="#CBD5E1"/>
+          <path d="M8 10H12" stroke="#10B981" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M8 13H15" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M8 16H13" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="17.5" cy="17.5" r="4.5" fill="#10B981"/>
+          <path d="M15.5 17.5L16.8 18.8L19.5 16" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="logo-name">Adapta<b>Currículo</b></span>
+    </a>
+    <nav>
+      <a href="#como" data-go="home">Como funciona</a>
+      <a href="#modelos" data-go="home">Modelos</a>
+      <a href="#planos" data-go="home">Planos</a>
+      <button class="btn btn-ghost btn-sm" id="navDashboardBtn" data-go="dashboard">📋 Painel</button>
+      <button class="btn btn-ghost btn-sm" data-go="saved">Meus Currículos <span class="badge-count" id="savedCount">0</span></button>
+      <button class="btn btn-ghost btn-sm" id="navAuthBtn" data-go="auth">👤 Entrar</button>
+      <button class="btn btn-primary btn-sm" data-go="auth">Começar grátis →</button>
+    </nav>
+  </header>
+
+  <!-- TELA: Início (Fácil, Ágil e Direta ao Ponto) -->
+  <main id="home" class="screen active">
+    <section class="hero">
+      <div class="hero-text">
+        <span class="pill">🇧🇷 Padrão ATS para Empresas + Currículo Lattes CNPq</span>
+        <h1>Envie seu currículo.<br /><span class="green">Saia aprovado.</span></h1>
+        <p>Você não precisa saber regras difíceis nem formatar margens. Envie seu arquivo antigo ou comece do zero: o site formata e enquadra seu currículo nos padrões oficiais de aprovação (Gupy, LinkedIn e Lattes CNPq) mantendo <strong>100% da sua história real</strong>.</p>
+        
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg" data-go="upload">⚡ Transformar meu currículo agora</button>
+          <button class="btn btn-ghost btn-lg" id="heroStartLattesBtn">📂 Preencher Lattes do Zero</button>
+        </div>
+        <div class="hero-trust-strip">
+          <span>✓ Sem cadastro obrigatório</span>
+          <span>✓ Pagamento único (sem assinatura)</span>
+          <span>✓ Word (.docx), PDF e Foto</span>
+        </div>
+      </div>
+
+      <!-- Vitrine Visual Limpa e Intuitiva (Card Antes x Depois) -->
+      <div class="hero-showcase">
+        <div class="xray-header">
+          <div class="xray-tab bad">
+            <small>❌ Como você escreve</small>
+            <strong>Texto simples ou antigo</strong>
+          </div>
+          <div class="xray-arrow">➔</div>
+          <div class="xray-tab good">
+            <small>✅ Como você recebe</small>
+            <strong>Pronto e Aprovado</strong>
+          </div>
+        </div>
+
+        <div class="xray-card">
+          <div class="xray-person">
+            <div class="xray-avatar">A✓</div>
+            <div>
+              <h4>Mariana Costa Silva</h4>
+              <p>Analista Administrativo · Belo Horizonte, MG</p>
+            </div>
+            <span class="xray-tag-ok">Nota 98/100</span>
+          </div>
+
+          <div class="xray-transform-box">
+            <div class="xray-before">
+              <span>Como o candidato escreveu:</span>
+              <p>“trabalhei na area fazendo relatorios e atendimento aos fornecedores.”</p>
+            </div>
+            <div class="xray-after">
+              <span>✨ No Adapta Currículo:</span>
+              <p>“<b>Atuei</b> na gestão administrativa elaborando relatórios gerenciais e conduzindo o relacionamento com fornecedores.”</p>
+            </div>
+          </div>
+
+          <div class="xray-badges">
+            <span>📄 PDF Texto Real (Gupy/ATS)</span>
+            <span>📝 Word (.docx) Editável</span>
+            <span>🎓 Currículo Lattes CNPq</span>
+            <span>💼 LinkedIn Pronto</span>
+          </div>
+        </div>
+        <div class="badge-ok">✓ 100% dos seus dados reais · Sem inventar nada</div>
+      </div>
+    </section>
+
+    <!-- 4 Passos Fáceis e Rápidos -->
+    <section id="como" class="section">
+      <h2>Pronto em 4 passos simples (menos de 2 minutos)</h2>
+      <div class="steps">
+        <div class="step">
+          <b>1</b>
+          <h3>Envie ou Digite</h3>
+          <p>Envie em PDF, Word, cole seu texto ou preencha do zero do seu jeito.</p>
+        </div>
+        <div class="step">
+          <b>2</b>
+          <h3>Ajuste Automático</h3>
+          <p>O site formata seu currículo e enquadra perfeitamente nas regras do ATS e do Lattes CNPq.</p>
+        </div>
+        <div class="step">
+          <b>3</b>
+          <h3>Escolha o Modelo</h3>
+          <p>Alterne entre 6 formatos com 1 clique (ATS, Lattes, Executivo, etc.).</p>
+        </div>
+        <div class="step">
+          <b>4</b>
+          <h3>Baixe Aprovado</h3>
+          <p>Download imediato em Word editável (.docx), PDF oficial ou Foto para WhatsApp.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="modelos" class="section alt">
+      <h2>6 modelos prontos para cada objetivo</h2>
+      <p class="muted" style="margin-top:-24px;margin-bottom:24px;">Clique em qualquer modelo abaixo para ver na mesma hora</p>
+      <div class="chips" id="homeTemplates"></div>
+    </section>
+
+    <section id="planos" class="section">
+      <h2>Transparência total: pagamento único, sem assinatura</h2>
+      <p class="muted" style="margin-top:-24px;margin-bottom:28px;">Liberação automática na mesma hora via Pix, Cartão ou Boleto pelo Mercado Pago</p>
+      <div class="plans">
+        <div class="plan clickable" data-go="upload">
+          <div>
+            <h3>Grátis</h3>
+            <p class="price">R$ 0</p>
+            <ul>
+              <li>1 currículo ATS em PDF</li>
+              <li>Otimização para filtros ATS e nota de aprovação</li>
+              <li>Com marca d'água discreta</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-ghost plan-btn">Testar Grátis Agora →</button>
+        </div>
+
+        <div class="plan clickable" data-choose-plan="avulso">
+          <div>
+            <h3>Intermediário (Vitalício)</h3>
+            <p class="price">R$ 19,90<small> pagamento único</small></p>
+            <ul>
+              <li><strong>Pague 1 única vez:</strong> acesso vitalício sem mensalidade</li>
+              <li>Todos os 6 modelos (incluindo Currículo Lattes) e cores</li>
+              <li>Download em Word (.docx), PDF e Foto (.png)</li>
+              <li><strong>100% Sem marca d'água</strong></li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-ghost plan-btn">Escolher Intermediário (R$ 19,90) →</button>
+        </div>
+
+        <div class="plan featured clickable" data-choose-plan="pro">
+          <span class="tag">⭐ Mais Escolhido · Completo Vitalício</span>
+          <div>
+            <h3>Pro Completo Vitalício</h3>
+            <p class="price">R$ 29,90<small> pagamento único</small></p>
+            <ul>
+              <li><strong>Pague 1 única vez:</strong> acesso vitalício sem mensalidade</li>
+              <li><strong>100% Sem marca d'água</strong> em todos os 6 modelos em Word (.docx), PDF e Foto</li>
+              <li>Ajuste por link da vaga + Pacote LinkedIn + Guia Lattes CNPq + Carta</li>
+              <li><strong>Atualizações futuras grátis:</strong> direito a todas as novas ferramentas sem pagar nada a mais</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-primary plan-btn">Liberar Pro Completo (R$ 29,90) →</button>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="dev-feedback-box">
+        <p>
+          💬 <strong>Fale com os Criadores e Desenvolvedores:</strong> Tem sugestões de melhorias, elogios, reclamações ou encontrou algum erro/bug? Acione nossa equipe para corrigirmos rapidamente no e-mail:
+          <a href="mailto:gfktech1977@gmail.com?subject=Feedback%20%2F%20Sugest%C3%A3o%20%E2%80%94%20Adapta%20Curr%C3%ADculo" class="dev-mail-link">gfktech1977@gmail.com</a>
+          <button type="button" class="copy-mail-btn" id="copyDevEmailBtn" title="Copiar e-mail de suporte">📋 Copiar e-mail</button>
+        </p>
+        <small>Muito obrigado por utilizar o Adapta Currículo e confiar em nossa plataforma para sua aprovação! 🚀</small>
+      </div>
+      <div class="footer-bottom">
+        © 2026 Adapta Currículo · Seus dados protegidos conforme a LGPD ·
+        <button type="button" class="admin-link" id="aiConfigBtn" title="Área exclusiva do proprietário do site">⚙️ Painel do Administrador</button>
+      </div>
+    </footer>
+  </main>
+
+  <!-- TELA: Envio -->
+  
+  <!-- Nova Tela de Entrada / Cadastro (Estilo OnlineCurrículo) -->
+  <main id="auth" class="screen">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        <div class="auth-logo-badge">
+          <span>⚡ Adapta Currículo</span>
+        </div>
+        <h2 class="auth-title">Entrar ou Cadastrar-se</h2>
+        <p class="auth-subtitle">Acesse seus currículos, monte seu perfil e otimize para qualquer vaga</p>
+
+        <!-- Caixa de Conta Vinculada Ativa (visível quando já conectado) -->
+        <div class="auth-active-box" id="authActiveAccountBox" style="display:none;">
+          <div class="auth-active-header">
+            <div class="auth-active-avatar" id="authActiveAvatar">👤</div>
+            <div class="auth-active-details">
+              <span class="auth-active-tag" id="authActiveProviderTag">Conta Vinculada</span>
+              <div class="auth-active-name" id="authActiveNameDisplay">Usuário</div>
+              <div class="auth-active-email" id="authActiveEmailDisplay">email@exemplo.com</div>
+              <span class="auth-plan-badge free" id="authActivePlanBadge">Plano Grátis</span>
+            </div>
+          </div>
+          <div class="auth-active-btns">
+            <button type="button" class="btn btn-primary btn-sm" id="authResumeActiveBtn">Acessar Meu Painel →</button>
+            <button type="button" class="btn btn-ghost btn-xs" id="authUnlinkBtn" title="Entrar com outro e-mail ou desconectar">Trocar de Conta 🔄</button>
+          </div>
+        </div>
+
+        <form id="authForm" class="auth-form" onsubmit="return false;">
+          <label for="authEmailInput">Seu e-mail profissional</label>
+          <input type="email" id="authEmailInput" class="auth-input" placeholder="exemplo: seu.nome@email.com" required />
+          <button type="button" class="btn btn-primary btn-block btn-lg" id="authSubmitEmailBtn">Continuar com E-mail →</button>
+        </form>
+
+        <div class="auth-divider">ou entre com uma rede</div>
+
+        <div class="social-auth-grid">
+          <button type="button" class="social-auth-btn google" id="authGoogleBtn" title="Conectar com Google">
+            <span class="soc-icon">G</span> Google
+          </button>
+          <button type="button" class="social-auth-btn linkedin" id="authLinkedinBtn" title="Conectar com LinkedIn">
+            <span class="soc-icon">in</span> LinkedIn
+          </button>
+          <button type="button" class="social-auth-btn facebook" id="authFacebookBtn" title="Conectar com Facebook">
+            <span class="soc-icon">f</span> Facebook
+          </button>
+          <button type="button" class="social-auth-btn skip" id="authSkipBtn" title="Continuar sem cadastro">
+            ⚡ Pular cadastro
+          </button>
+        </div>
+
+        <div class="auth-footer-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-go="home">← Voltar ao início</button>
+          <button type="button" class="btn btn-primary btn-sm" id="authDirectDashBtn">Ir ao Painel →</button>
+        </div>
+
+        <p class="auth-privacy-note">
+          🔒 Seus dados ficam protegidos e salvos no seu navegador. Sem assinaturas surpresa ou cobranças ocultas.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Novo Dashboard / Painel de Opções Inteligentes (Pós-login) -->
+  <main id="dashboard" class="screen">
+    <div class="dashboard-wrapper">
+      <div class="dashboard-hero">
+        <div>
+          <span class="pill" style="background:rgba(255,255,255,0.15);color:#FFFFFF;border:none;margin-bottom:12px;">👋 Boas-vindas ao Adapta Currículo</span>
+          <h2 id="dashWelcomeTitle">O que você deseja fazer agora?</h2>
+          <p>Selecione uma das opções abaixo para criar, otimizar ou adaptar seu currículo de forma rápida e 100% gratuita.</p>
+        </div>
+        <div class="dashboard-user-card" id="dashUserCard">
+          <div class="dash-user-info">
+            <span class="dash-user-avatar" id="dashUserAvatar">👤</span>
+            <div>
+              <div class="dash-user-name" id="dashUserNameDisplay">Visitante</div>
+              <div class="dash-user-email" id="dashUserEmailDisplay">Não conectado</div>
+              <span class="dash-user-plan" id="dashUserPlanDisplay">Plano Grátis</span>
+            </div>
+          </div>
+          <div class="dash-user-actions">
+            <button type="button" class="btn btn-ghost btn-xs" id="dashSwitchAccountBtn" style="color:#FFFFFF;border-color:rgba(255,255,255,0.35);">🔄 Trocar / Vincular Conta</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Card 1: Criar do Zero -->
+        <div class="dash-card">
+          <span class="dash-card-badge ats">Recomendado</span>
+          <div class="dash-card-icon">📝</div>
+          <h3>Criar Novo Currículo do Zero</h3>
+          <p>Preencha seus dados passo a passo em um formulário guiado, com os modelos profissionais que passam nos filtros ATS das empresas.</p>
+          <div class="dash-card-actions">
+            <button type="button" class="btn btn-primary" id="dashStartBlankCorpBtn">Começar do Zero →</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Enviar Currículo Existente -->
+        <div class="dash-card">
+          <span class="dash-card-badge upload">Importação Fácil</span>
+          <div class="dash-card-icon">📤</div>
+          <h3>Enviar Currículo Existente</h3>
+          <p>Suba seu arquivo atual (PDF ou Word). O sistema organiza seus dados reais e permite passar pelos filtros e modelos que você escolher.</p>
+          <div class="dash-card-actions">
+            <button type="button" class="btn btn-primary" id="dashUploadBtn">Enviar Arquivo →</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Perfil para o LinkedIn -->
+        <div class="dash-card">
+          <span class="dash-card-badge li">Destaque nas Buscas</span>
+          <div class="dash-card-icon">💼</div>
+          <h3>Criar Perfil para o LinkedIn</h3>
+          <p>Gere títulos estratégicos, resumo 'Sobre' impactante e lista de competências prontas para copiar e colar no seu perfil do LinkedIn.</p>
+          <div class="dash-card-actions">
+            <button type="button" class="btn btn-primary" id="dashLinkedinBtn">Criar Perfil LinkedIn →</button>
+          </div>
+        </div>
+
+        <!-- Card 4: Currículo Lattes CNPq -->
+        <div class="dash-card">
+          <span class="dash-card-badge lattes">Acadêmico & CNPq</span>
+          <div class="dash-card-icon">🎓</div>
+          <h3>Currículo Lattes (CNPq)</h3>
+          <p>Preencha o Lattes do zero nas normas da ABNT/CNPq com todas as pastas oficiais, ou converta seu currículo comum em Lattes.</p>
+          <div class="dash-card-actions">
+            <button type="button" class="btn btn-primary" id="dashStartBlankLattesBtn">Lattes do Zero</button>
+            <button type="button" class="btn btn-ghost" id="dashConvertLattesBtn">Converter p/ Lattes</button>
+          </div>
+        </div>
+
+        <!-- Card 5: Adaptar para Vaga Específica -->
+        <div class="dash-card">
+          <span class="dash-card-badge job">Sob Medida</span>
+          <div class="dash-card-icon">🎯</div>
+          <h3>Adaptar para uma Vaga</h3>
+          <p>Cole a descrição da vaga que você quer disputar. O sistema destaca as palavras-chave ideais para colocar no seu currículo.</p>
+          <div class="dash-card-actions">
+            <button type="button" class="btn btn-primary" id="dashJobTailorBtn">Adaptar para Vaga →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <main id="upload" class="screen">
+    <div class="wizard">
+      <ol class="progress"><li class="on">1. Enviar</li><li>2. Conferir</li><li>3. Modelo e Vaga</li><li>4. Baixar</li></ol>
+      <h2>Envie seu currículo ou preencha do zero</h2>
+      <p class="muted">Nosso programa interno lê arquivos PDF, Word (.docx) ou texto colado sem depender de IA externa.</p>
+      <div class="drop" id="drop" role="button" tabindex="0" title="Clique ou arraste um arquivo para anexar seu currículo">
+        <input type="file" id="file" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.rtf" style="display:none;" />
+        <div class="drop-icon">⬆</div>
+        <p><strong>Arraste seu arquivo aqui</strong> ou clique para escolher</p>
+        <span class="muted">PDF, Word (.docx, .doc), TXT ou Foto · Leitura instantânea no navegador</span>
+      </div>
+
+      <details class="paste-box">
+        <summary>Ou cole o texto do seu currículo aqui</summary>
+        <textarea id="pasteCvText" placeholder="Cole aqui todo o conteúdo do seu currículo atual..."></textarea>
+        <button class="btn btn-primary btn-sm" id="parseTextBtn" type="button">Analisar texto colado →</button>
+      </details>
+
+      <!-- Opção de Preencher do Zero (Currículo Profissional ou Currículo Lattes) -->
+      <div class="scratch-box">
+        <span class="scratch-title">✨ Ainda não tem currículo pronto? Preencha do zero dentro da plataforma:</span>
+        <div class="scratch-grid">
+          <button type="button" class="scratch-card corp" id="startBlankCorpBtn">
+            <span class="scratch-ico">📝</span>
+            <div>
+              <strong>Preencher Currículo Profissional do Zero</strong>
+              <small>Abre os campos guiados para vagas em empresas (Gupy, ATS, LinkedIn e Internacional) para preencher em poucos minutos.</small>
+            </div>
+          </button>
+          <button type="button" class="scratch-card lattes" id="startBlankLattesBtn">
+            <span class="scratch-ico">📂</span>
+            <div>
+              <strong>Preencher Currículo Lattes do Zero</strong>
+              <small>Abre as pastas oficiais do CNPq (Formação, Orientador, Artigos, Projetos e Idiomas) em branco para você preencher passo a passo.</small>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="sample-bar">
+        <button class="link" id="useSample">Ver exemplo preenchido (Corporativo)</button>
+        <span class="muted"> · ou · </span>
+        <button class="link" id="useLattesSample">🎓 Ver exemplo preenchido de Currículo Lattes (Doutorado/Mestrado)</button>
+      </div>
+
+      <div class="loading" id="loading" hidden>
+        <div class="spinner"></div>
+        <p id="loadingText">Lendo seu currículo…</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- TELA: Conferência e Preenchimento do Zero -->
+  <main id="review" class="screen">
+    <div class="wizard wide">
+      <ol class="progress"><li class="done">1. Enviar</li><li class="on">2. Preencher / Conferir</li><li>3. Modelo e Vaga</li><li>4. Baixar</li></ol>
+
+      <!-- Seletor Rápido de Preenchimento: Currículo Profissional vs. Currículo Lattes -->
+      <div class="review-mode-selector" id="reviewModeSelector">
+        <button type="button" class="mode-switch-btn on" id="modeBtnCorp" title="Preenchimento para Empresas, Mercado e Robôs ATS">
+          <span class="ms-icon">💼</span>
+          <span class="ms-text">
+            <strong>Currículo Profissional (ATS)</strong>
+            <small id="modeSubCorp">Empresas e Mercado</small>
+          </span>
+        </button>
+        <button type="button" class="mode-switch-btn" id="modeBtnLattes" title="Preenchimento nas Pastas Oficiais do CNPq">
+          <span class="ms-icon">🎓</span>
+          <span class="ms-text">
+            <strong>Currículo Lattes (CNPq)</strong>
+            <small id="modeSubLattes">Mestrado, Doutorado e CNPq</small>
+          </span>
+        </button>
+      </div>
+
+      <div class="review-header">
+        <div>
+          <h2 id="reviewMainTitle">Confira e preencha seus dados</h2>
+          <p class="muted" id="reviewMainSub">Regra de fidelidade 100%: confira e ajuste livremente seus dados reais com total controle.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button type="button" class="btn btn-ghost btn-sm" id="clearForBlankLattesBtn" title="Limpar campos para preencher o Lattes do zero">📂 Limpar p/ Lattes do Zero</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="clearForBlankCorpBtn" title="Limpar campos para preencher Currículo do zero">📝 Limpar p/ Currículo do Zero</button>
+          <span class="fidelity-badge" id="fidelityBadge">✓ 100% Editável</span>
+        </div>
+      </div>
+
+      <!-- Barra de Pastas do Currículo Lattes (Aparece em destaque quando o usuário está preenchendo o Lattes) -->
+      <div class="lattes-folder-bar" id="lattesFolderBar" hidden>
+        <div class="lfb-head" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <span>📂 <strong>Manual Oficial Currículo Lattes (CNPq):</strong> Você pode escrever normalmente com suas palavras (mesmo em 1ª pessoa). Ao avançar ou clicar no botão ao lado, o sistema converte tudo automaticamente para as normas do CNPq (Resumo em 3ª pessoa, Nome em Citações ABNT, Titulação, Projetos, Idiomas e Produções).</span>
+          <button type="button" class="btn btn-primary btn-sm" id="applyLattesNormsBtn">🎓 Formatar nas Normas do Lattes Agora</button>
+        </div>
+      </div>
+
+      <div class="ai-tip" id="aiTipBox">
+        <div>💡 <b>Diagnóstico do Programa Interno de Filtragem:</b><ul id="aiQuestionsList"></ul></div>
+      </div>
+
+      <form id="reviewForm" class="form" onsubmit="return false;"></form>
+
+      <div class="exp-section">
+        <div class="exp-header">
+          <h3>Experiências Profissionais</h3>
+          <button type="button" class="btn btn-ghost btn-sm" id="addExpBtn">+ Adicionar experiência</button>
+        </div>
+        <div id="expList"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" data-go="upload">← Enviar outro</button>
+        <button class="btn btn-primary" data-go="template">Escolher modelo e formato →</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- TELA: Modelo + prévia -->
+  <main id="template" class="screen">
+    <div class="editor">
+      <aside class="panel">
+        <ol class="progress small"><li class="done">Enviar</li><li class="done">Conferir</li><li class="on">Modelo</li><li>Baixar</li></ol>
+
+        <!-- Termômetro ATS -->
+        <div class="ats-meter">
+          <div class="ats-meter-top">
+            <span>Pontuação ATS / Recrutador</span>
+            <strong id="atsScoreVal">92/100</strong>
+          </div>
+          <div class="ats-bar"><div class="ats-bar-fill" id="atsBarFill" style="width:92%"></div></div>
+          <small id="atsScoreHint">Excelente leitura para robôs de recrutamento.</small>
+        </div>
+
+        <!-- Janela de Anexar / Trocar Currículo Diretamente na Barra Lateral -->
+        <div class="side-attach-box" id="sideAttachBox">
+          <div class="side-attach-label" id="sideDrop" role="button" tabindex="0" title="Clique ou arraste um arquivo para anexar seu currículo">
+            <input type="file" id="sideFileInput" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.rtf" style="display:none;" />
+            <span class="sab-ico" id="sideAttachIco">📎</span>
+            <div class="sab-content">
+              <strong id="sideAttachTitle">Anexar / Trocar Currículo</strong>
+              <small id="sideAttachSub">Arraste PDF, Word (.docx, .doc) ou clique aqui</small>
+            </div>
+            <span class="sab-badge" id="sideAttachBadge">Upload</span>
+          </div>
+        </div>
+
+        <h3>1. Escolha o filtro (Modelo)</h3>
+        <div class="tpl-grid" id="tplGrid"></div>
+
+        <!-- Janela Rápida do Currículo Profissional (Padrão ATS / Empresas) -->
+        <div class="corp-quick-folder" id="corpQuickFolderBox">
+          <div class="cqf-info">
+            <span class="cqf-ico">💼</span>
+            <div>
+              <strong>Currículo Profissional (Padrão ATS)</strong>
+              <small>Edite seus dados ou preencha do zero para empresas e robôs ATS</small>
+            </div>
+          </div>
+          <div class="cqf-btns">
+            <button type="button" class="btn btn-ghost btn-sm" id="editCurrentCorpBtn" title="Editar os dados do Currículo Profissional atual">✏️ Editar</button>
+            <button type="button" class="btn btn-primary btn-sm" id="fillBlankCorpFromEditorBtn" title="Começar a preencher um Currículo Profissional em branco do zero">📝 Preencher do Zero</button>
+          </div>
+        </div>
+
+        <!-- Pastinha Rápida do Currículo Lattes ao lado dos filtros -->
+        <div class="lattes-quick-folder" id="lattesQuickFolderBox">
+          <div class="lqf-info">
+            <span class="lqf-ico">📂</span>
+            <div>
+              <strong>Pasta Currículo Lattes (CNPq)</strong>
+              <small>Edite ou preencha seu Lattes do zero aqui dentro</small>
+            </div>
+          </div>
+          <div class="lqf-btns">
+            <button type="button" class="btn btn-ghost btn-sm" id="editCurrentLattesBtn" title="Editar os campos do Currículo Lattes atual">✏️ Editar</button>
+            <button type="button" class="btn btn-primary btn-sm" id="fillBlankLattesFromEditorBtn" title="Começar a preencher um Currículo Lattes em branco do zero">📂 Preencher do Zero</button>
+          </div>
+        </div>
+
+        <h3>2. Foto no currículo</h3>
+        <div class="toggle" id="photoToggle">
+          <button data-photo="1" class="on" type="button">Com foto</button>
+          <button data-photo="0" type="button">Sem foto</button>
+        </div>
+        <div class="photo-controls" id="photoControls">
+          <label class="btn btn-ghost btn-sm photo-upload-lbl">
+            📷 Enviar minha foto
+            <input type="file" id="photoInput" accept="image/*" hidden />
+          </label>
+          <button class="btn btn-ghost btn-sm" id="photoShapeBtn" type="button" title="Alternar formato">Formato: Redonda</button>
+          <button class="btn btn-ghost btn-sm" id="photoRemoveBtn" type="button" hidden>Remover</button>
+        </div>
+        <p class="note" id="photoNote"></p>
+
+        <h3>3. Cor de destaque</h3>
+        <div class="colors" id="colors"></div>
+
+        <div class="plan-status-box" id="planStatusBox">
+          <div class="plan-status-line">
+            <span>Seu plano: <strong id="currentPlanBadge">Grátis (com marca d'água)</strong></span>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" id="removeWatermarkBtn" style="width:100%;margin-top:6px;">✨ Remover marca d'água (R$ 19,90 ou R$ 29,90)</button>
+        </div>
+
+        <div class="panel-actions">
+          <div class="dl">
+            <button class="btn btn-primary dl-main" id="downloadBtn" type="button">⬇ Baixar (Word · PDF · Foto) ▾</button>
+            <div class="dl-menu" id="dlMenu" hidden></div>
+          </div>
+          <div class="panel-sub-actions">
+            <button class="btn btn-ghost btn-sm" id="copyLinkDirectBtn" type="button">🔗 Copiar link</button>
+            <button class="btn btn-ghost btn-sm" data-go="review" type="button">✏️ Editar dados</button>
+            <button class="btn btn-ghost btn-sm" data-go="vaga" type="button">🎯 Ajustar p/ Vaga</button>
+            <button class="btn btn-ghost btn-sm" data-go="linkedin" type="button">💼 LinkedIn</button>
+            <button class="btn btn-ghost btn-sm" data-go="lattes" type="button">🎓 Lattes CNPq</button>
+            <button class="btn btn-ghost btn-sm" data-go="carta" type="button">✉️ E-mail / Carta</button>
+            <button class="btn btn-ghost btn-sm" id="whatsBtn" type="button">💬 WhatsApp</button>
+            <button class="btn btn-ghost btn-sm" id="saveVersionBtn" type="button">💾 Salvar versão</button>
+          </div>
+        </div>
+      </aside>
+      <section class="preview-wrap"><div class="paper" id="paper"></div></section>
+    </div>
+  </main>
+
+  <!-- TELA: Ajuste para Vaga Específica -->
+  <main id="vaga" class="screen">
+    <div class="wizard wide">
+      <h2>🎯 Adaptar Currículo para a Vaga Desejada</h2>
+      <p class="muted">Informe o <strong>cargo pretendido</strong> e a <strong>descrição da vaga</strong>. O sistema cruza os requisitos com o seu histórico, ajusta o resumo profissional e formata seu currículo direto no modelo <strong>ATS</strong> para você ser chamado para a entrevista.</p>
+      <div class="vaga-grid">
+        <div>
+          <label class="vaga-lbl">🎯 Nome / Cargo da vaga pretendida
+            <input type="text" id="jobTitleInput" placeholder="Ex.: Analista Financeiro, Operador de Monitoramento, Gerente de Vendas..." />
+          </label>
+          <label class="vaga-lbl" style="margin-top:14px;">📄 Descrição completa dos requisitos e atribuições da vaga
+            <textarea id="jobDescInput" placeholder="Cole aqui o texto da vaga (requisitos, atividades, conhecimentos desejados, diferenciais)..."></textarea>
+          </label>
+          <details class="vaga-url-details" style="margin-top:10px;">
+            <summary style="font-size:0.86rem;color:var(--text-muted);cursor:pointer;">🔗 Ou prefere buscar direto por link (Gupy, LinkedIn, Vagas.com)?</summary>
+            <div class="url-row" style="margin-top:8px;">
+              <input type="url" id="jobUrlInput" placeholder="https://empresa.gupy.io/jobs/..." />
+              <button class="btn btn-ghost btn-sm" id="fetchJobUrlBtn" type="button">Buscar pelo link</button>
+            </div>
+          </details>
+          <div class="vaga-btns" style="margin-top:16px;">
+            <button class="btn btn-primary" id="analyzeJobBtn" type="button">🎯 Adaptar meu currículo para esta vaga agora →</button>
+            <button class="btn btn-ghost btn-sm" id="sampleJobBtn" type="button">Preencher vaga de exemplo</button>
+          </div>
+        </div>
+        <div class="vaga-result" id="vagaResult">
+          <div class="vaga-score-circle"><strong id="jobMatchScore">--</strong><span>Compatibilidade com a vaga</span></div>
+          <h4>✓ Palavras-chave da vaga que seu currículo já tem</h4>
+          <div class="kw-list" id="kwMatched"></div>
+          <h4>+ Requisitos da vaga para adicionar (clique apenas no que você domina)</h4>
+          <div class="kw-list" id="kwMissing"></div>
+          <p class="muted" id="jobAdaptAdvice" style="margin-top:10px;"></p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" data-go="template">← Voltar ao currículo</button>
+        <button class="btn btn-primary" id="applyJobKeywordsBtn" type="button" hidden>Ver meu currículo adaptado para a vaga em ATS →</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- TELA: LinkedIn -->
+  <main id="linkedin" class="screen">
+    <div class="wizard wide">
+      <div class="review-header">
+        <div>
+          <h2>Pacote LinkedIn Campeão</h2>
+          <p class="muted">Textos estratégicos gerados a partir de 100% do seu currículo para atrair recrutadores nas buscas.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="copyAllLiBtn" type="button">Copiar tudo</button>
+      </div>
+      <div id="liBlocks"></div>
+      <div class="actions"><button class="btn btn-ghost" data-go="template">← Voltar ao currículo</button></div>
+    </div>
+  </main>
+
+  <!-- TELA: Pacote Currículo Lattes (CNPq) -->
+  <main id="lattes" class="screen">
+    <div class="wizard wide">
+      <div class="review-header">
+        <div>
+          <h2>🎓 Guia e Textos para o Currículo Lattes (CNPq)</h2>
+          <p class="muted">Seus dados formatados exatamente nos módulos e regras oficiais da Plataforma Lattes (<a href="https://lattes.cnpq.br/" target="_blank" rel="noopener" style="text-decoration:underline;color:var(--green-dark);">lattes.cnpq.br</a>) para copiar e colar.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm" id="editLattesFromGuideBtn" type="button">✏️ Editar dados</button>
+          <button class="btn btn-ghost btn-sm" id="blankLattesFromGuideBtn" type="button">📂 Preencher do Zero</button>
+          <button class="btn btn-ghost btn-sm" id="viewLattesModelBtn" type="button">📄 Ver folha no modelo Lattes</button>
+          <button class="btn btn-primary btn-sm" id="copyAllLattesBtn" type="button">Copiar tudo</button>
+        </div>
+      </div>
+      <div id="lattesBlocks"></div>
+      <div class="actions"><button class="btn btn-ghost" data-go="template">← Voltar ao currículo</button></div>
+    </div>
+  </main>
+
+  <!-- TELA: Carta de Apresentação e E-mail -->
+  <main id="carta" class="screen">
+    <div class="wizard wide">
+      <h2>✉️ E-mail e Carta de Apresentação</h2>
+      <p class="muted">Prontos para enviar junto com seu currículo em PDF ou Word por e-mail ou WhatsApp.</p>
+      <div id="cartaBlocks"></div>
+      <div class="actions"><button class="btn btn-ghost" data-go="template">← Voltar ao currículo</button></div>
+    </div>
+  </main>
+
+  <!-- TELA: Meus Currículos Salvos -->
+  <main id="saved" class="screen">
+    <div class="wizard wide">
+      <div class="review-header">
+        <div>
+          <h2>📂 Meus Currículos Salvos</h2>
+          <p class="muted">Guarde diferentes versões (ex.: "Administrativo ATS", "Executivo com foto", "Lattes") vinculadas ao seu e-mail.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="saveCurrentHereBtn" type="button">+ Salvar currículo atual</button>
+      </div>
+      <!-- Painel de Vinculação de Conta por E-mail (Sem Senha) -->
+      <div id="emailSyncContainer"></div>
+      <div id="savedList" class="saved-grid"></div>
+      <div class="actions"><button class="btn btn-ghost" data-go="template">← Ir para o editor</button></div>
+    </div>
+  </main>
+
+  <!-- MODAL: Checkout de Pagamento Seguro e Automático (Plano Intermediário e Plano Pro) -->
+  <div class="modal-backdrop" id="checkoutModal" hidden>
+    <div class="modal checkout-modal">
+      <header>
+        <h3 id="checkoutTitle">Liberar Currículo Sem Marca d'Água</h3>
+        <button class="install-x" id="closeCheckoutModal" aria-label="Fechar">✕</button>
+      </header>
+      <p class="muted" id="checkoutSubtitle">Escolha seu plano de pagamento único (sem mensalidade) e receba a liberação automática na mesma hora.</p>
+
+      <!-- Seletor rápido de plano dentro do modal -->
+      <div class="plan-QuickSwitch" id="modalPlanSwitch">
+        <button type="button" class="plan-switch-btn" data-switch-plan="avulso">
+          <div class="ps-top">
+            <strong>Plano Intermediário</strong>
+            <span class="ps-price">R$ 19,90 <small>único</small></span>
+          </div>
+          <small>Todos os 6 modelos (incluindo Lattes) em Word, PDF e Foto <b>sem marca d'água</b></small>
+        </button>
+        <button type="button" class="plan-switch-btn on" data-switch-plan="pro">
+          <span class="ps-badge">Mais escolhido · Vitalício</span>
+          <div class="ps-top">
+            <strong>Plano Pro Completo</strong>
+            <span class="ps-price">R$ 29,90 <small>único</small></span>
+          </div>
+          <small>Todos os 6 modelos em Word, PDF e Foto <b>sem marca d'água</b> + Ajuste por Vaga, LinkedIn, Lattes e <b>atualizações grátis</b></small>
+        </button>
+      </div>
+
+      <div class="lifetime-guarantee" id="lifetimeGuarantee">
+        <strong>✨ Garantia Vitalícia do Plano Pro Completo (R$ 29,90):</strong>
+        <ul>
+          <li>✓ <strong>Pagamento uma única vez:</strong> você não terá nenhuma cobrança mensal ou recorrente.</li>
+          <li>✓ <strong>100% Sem marca d'água em tudo:</strong> baixe quantos currículos quiser em Word (.docx), PDF e Foto (.png).</li>
+          <li>✓ <strong>Atualizações futuras grátis:</strong> sempre que o site receber novas ferramentas ou modelos, você terá acesso automático sem pagar nada a mais.</li>
+        </ul>
+      </div>
+
+      <div class="mp-methods-banner">
+        <span>Formas aceitas no Mercado Pago:</span>
+        <b>💠 Pix (liberação em segundos)</b> · <b>💳 Cartão</b> · <b>📄 Boleto</b>
+      </div>
+
+      <div class="checkout-actions">
+        <a href="https://mpago.la/2JuwzB7" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="goExternalCheckoutBtn" style="width:100%;text-align:center;font-size:1.02rem;padding:15px 20px;">🔒 Pagar R$ 29,90 no Mercado Pago →</a>
+        <div class="auto-verify-status" id="autoVerifyStatus">
+          <span class="pulse-dot"></span>
+          <span id="autoVerifyText"><b>Reconhecimento automático antifraude ativo:</b> assim que o pagamento for aprovado no Mercado Pago, seu acesso é liberado sozinho nesta tela sem precisar clicar em nada.</span>
+        </div>
+        <details class="receipt-check-box">
+          <summary>Pagou pelo celular ou em outro aparelho? Validar pelo nº do comprovante</summary>
+          <div class="url-row" style="margin-top:8px;">
+            <input type="text" id="mpPaymentIdInput" placeholder="Nº da operação Mercado Pago (ex.: 89412049123)" />
+            <button type="button" class="btn btn-ghost btn-sm" id="verifyReceiptBtn">Validar no Mercado Pago</button>
+          </div>
+        </details>
+        <details class="receipt-check-box" style="margin-top:10px;">
+          <summary>🔑 Já comprou? Digite seu e-mail para carregar suas configurações salvas</summary>
+          <div class="url-row" style="margin-top:8px;">
+            <input type="email" id="userEmailRecoveryInput" placeholder="Digite o mesmo e-mail usado no pagamento" />
+            <button type="button" class="btn btn-primary btn-sm" id="recoverEmailAccessBtn">Entrar com e-mail</button>
+          </div>
+          <small class="muted" style="display:block;margin-top:4px;">Seu plano e seus currículos salvos ficam vinculados ao seu e-mail.</small>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Painel do Administrador (Área do Proprietário) -->
+  <div class="modal-backdrop" id="aiModal" hidden>
+    <div class="modal admin-modal">
+      <header>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <h3 id="adminModalHeaderTitle" style="margin:0;">⚙️ Painel do Administrador</h3>
+          <span class="admin-badge-auth" id="adminAuthStatusBadge" style="display:none;">✓ Autenticado</span>
+        </div>
+        <button class="install-x" id="closeAiModal" aria-label="Fechar">✕</button>
+      </header>
+
+      <!-- TELA 1: Bloqueio por Senha Mestra -->
+      <div id="adminPasswordGate" style="padding:10px 0 16px;">
+        <p class="muted">Área restrita ao proprietário do Adapta Currículo. Digite sua senha mestra para gerenciar clientes, planos, links de pagamento e configurações.</p>
+        <div style="margin:16px 0;">
+          <label style="display:block;font-weight:600;font-size:.9rem;color:var(--navy);margin-bottom:6px;">Senha Mestra do Administrador</label>
+          <div style="display:flex;gap:8px;">
+            <input type="password" id="adminMasterPasswordInput" placeholder="Digite a senha mestra..." style="flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font:400 .95rem Inter;" />
+            <button type="button" class="btn btn-primary" id="adminLoginBtn">Acessar Painel</button>
+          </div>
+          <small id="adminAuthError" style="color:var(--red);display:none;margin-top:6px;font-weight:600;"></small>
+        </div>
+        <div style="background:#F8FAFC;border:1px dashed var(--border);border-radius:10px;padding:12px;font-size:.82rem;color:var(--muted);line-height:1.5;">
+          💡 <strong>Dica de Acesso:</strong> Pressione <code>Ctrl + Shift + A</code> a qualquer momento ou acesse <code>#admin</code> na barra de endereços para abrir este painel. Senha inicial: <code>admin1977</code> (alterável na aba Segurança).
+        </div>
+      </div>
+
+      <!-- TELA 2: Painel Administrativo Completo (visível após desbloqueio) -->
+      <div id="adminDashboardContent" style="display:none;">
+        <div class="admin-top-nav">
+          <div class="admin-tab-buttons">
+            <button type="button" class="admin-tab-btn active" data-admin-tab="clients">👥 Clientes & Licenças</button>
+            <button type="button" class="admin-tab-btn" data-admin-tab="settings">⚙️ Links & Pagamentos</button>
+            <button type="button" class="admin-tab-btn" data-admin-tab="security">🔒 Trocar Senha Mestra</button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-xs" id="adminLogoutBtn" title="Encerrar sessão de administrador">Sair 🚪</button>
+        </div>
+
+        <!-- ABA 1: Clientes e Licenças por E-mail -->
+        <div class="admin-tab-pane active" id="adminPaneClients">
+          <div class="admin-box">
+            <h4 style="margin:0 0 6px;font-size:.95rem;color:var(--navy);">➕ Liberar ou Ajustar Acesso de Usuário</h4>
+            <p class="muted" style="font-size:.82rem;margin-bottom:12px;">Vincule o e-mail do cliente para liberar planos vitalícios, conceder dias de teste cortesia ou revogar acesso.</p>
+            <div class="admin-form-grid">
+              <label>E-mail do Cliente:
+                <input type="email" id="adminUserEmailInput" placeholder="cliente@email.com" />
+              </label>
+              <label>Plano ou Período:
+                <select id="adminUserPlanSelect">
+                  <option value="pro">Pro Vitalício (R$ 29,90) — Sem marca d'água</option>
+                  <option value="avulso">Intermediário Vitalício (R$ 19,90) — Sem marca d'água</option>
+                  <option value="trial_3">🎁 Teste Cortesia — 3 Dias</option>
+                  <option value="trial_7">🎁 Teste Cortesia — 7 Dias</option>
+                  <option value="free">Plano Grátis (Revogar pago)</option>
+                </select>
+              </label>
+              <label style="grid-column:1 / -1;">Observações internas (opcional):
+                <input type="text" id="adminUserNotesInput" placeholder="Ex: Pagou Pix direto / Amigo / Teste WhatsApp" />
+              </label>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;">
+              <button type="button" class="btn btn-ghost btn-sm" id="adminClearUserFormBtn">Limpar</button>
+              <button type="button" class="btn btn-primary btn-sm" id="adminSaveUserBtn">Salvar / Liberar Acesso ✓</button>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <h4 style="margin:0;font-size:.95rem;color:var(--navy);">📋 Clientes Cadastrados</h4>
+                <span class="counter-pill" id="adminUsersCount">0</span>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="adminSearchUsersInput" placeholder="Buscar por e-mail ou nota..." style="padding:6px 10px;font-size:.82rem;border:1px solid var(--border);border-radius:8px;" />
+                <button type="button" class="btn btn-ghost btn-xs" id="adminRefreshUsersBtn" title="Atualizar lista">🔄</button>
+              </div>
+            </div>
+
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>E-mail</th>
+                    <th>Plano / Status</th>
+                    <th>Concedido / Validade</th>
+                    <th>Observações</th>
+                    <th style="text-align:right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTableBody">
+                  <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Carregando clientes...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 2: Links de Pagamento & Configurações Gerais -->
+        <div class="admin-tab-pane" id="adminPaneSettings" style="display:none;">
+          <p class="muted" style="margin-top:6px;font-size:.85rem;">Configure seus links de checkout Mercado Pago (com desconto/preço único), chave Pix e credenciais antifraude.</p>
+          <label class="modal-lbl">Link de Pagamento — Plano Intermediário / Avulso (R$ 19,90)
+            <input type="url" id="linkAvulsoInput" value="https://mpago.la/1BaWCc3" placeholder="https://mpago.la/1BaWCc3" />
+          </label>
+          <label class="modal-lbl">Link de Pagamento — Plano Pro Completo (R$ 29,90 único)
+            <input type="url" id="linkProInput" value="https://mpago.la/2JuwzB7" placeholder="https://mpago.la/2JuwzB7" />
+          </label>
+          <label class="modal-lbl">Sua Chave Pix ou Código Pix Copia e Cola
+            <input type="text" id="pixKeyInput" placeholder="seuemail@dominio.com.br ou CNPJ" />
+          </label>
+          <label class="modal-lbl">Access Token do Mercado Pago (para reconhecimento automático antifraude)
+            <input type="password" id="mpAccessTokenInput" placeholder="APP_USR-..." autocomplete="off" />
+          </label>
+          <label class="modal-lbl">Chave da API Gemini do Servidor (opcional)
+            <input type="password" id="geminiKeyInput" placeholder="AIzaSy..." autocomplete="off" />
+          </label>
+          <label class="modal-lbl">Testar nível de acesso no seu navegador atual
+            <select id="adminPlanSelect" style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;font:600 .9rem Inter;">
+              <option value="free">Plano Grátis (com marca d'água)</option>
+              <option value="avulso">Plano Intermediário / Avulso — R$ 19,90 (SEM marca d'água)</option>
+              <option value="pro">Plano Pro Completo — R$ 29,90 (SEM marca d'água + Vitalício)</option>
+            </select>
+          </label>
+          <div class="modal-actions" style="margin-top:16px;">
+            <button class="btn btn-ghost btn-sm" id="clearAiKeyBtn" type="button">Restaurar padrão</button>
+            <button class="btn btn-primary btn-sm" id="saveAiKeyBtn" type="button">Salvar configurações</button>
+          </div>
+        </div>
+
+        <!-- ABA 3: Segurança / Trocar Senha Mestra -->
+        <div class="admin-tab-pane" id="adminPaneSecurity" style="display:none;">
+          <div class="admin-box">
+            <h4 style="margin:0 0 6px;font-size:.95rem;color:var(--navy);">🔒 Alterar Senha Mestra do Administrador</h4>
+            <p class="muted" style="font-size:.84rem;margin-bottom:14px;">Atualize a senha necessária para desbloquear e gerenciar este painel.</p>
+            <div style="display:flex;flex-direction:column;gap:10px;max-width:360px;">
+              <label style="display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.85rem;color:var(--navy);">
+                Senha Atual:
+                <input type="password" id="adminCurrentPwInput" placeholder="Digite a senha atual..." style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;" />
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.85rem;color:var(--navy);">
+                Nova Senha Mestra:
+                <input type="password" id="adminNewPwInput" placeholder="Mínimo 4 caracteres..." style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;" />
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.85rem;color:var(--navy);">
+                Confirme a Nova Senha:
+                <input type="password" id="adminConfirmPwInput" placeholder="Repita a nova senha..." style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;" />
+              </label>
+              <button type="button" class="btn btn-primary btn-sm" id="adminChangePwSubmitBtn" style="align-self:flex-start;margin-top:6px;">Salvar Nova Senha ✓</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Vinculação de Conta Social (Google, LinkedIn, Facebook) -->
+  <div class="modal-backdrop" id="socialAuthModal" hidden>
+    <div class="modal social-auth-modal">
+      <header>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="social-modal-icon google" id="socialModalIcon">G</span>
+          <h3 id="socialModalTitle" style="margin:0;">Conectar Conta Google</h3>
+        </div>
+        <button class="install-x" id="closeSocialAuthModal" aria-label="Fechar">✕</button>
+      </header>
+      <p class="muted" id="socialModalSubtitle" style="font-size:0.9rem;margin:6px 0 16px;">
+        Vincule seus dados para preencher seu currículo automaticamente e sincronizar seus modelos salvos.
+      </p>
+
+      <form id="socialAuthForm" onsubmit="return false;" style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <label style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--navy);">Seu Nome Completo</label>
+          <input type="text" id="socialNameInput" placeholder="Ex: Guilherme Kneipp" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.95rem;" required />
+        </div>
+        <div>
+          <label style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--navy);">Seu E-mail da Conta</label>
+          <input type="email" id="socialEmailInput" placeholder="Ex: usuario@gmail.com" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.95rem;" required />
+        </div>
+        <div id="socialHeadlineWrap" style="display:none;">
+          <label style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--navy);">Título / Cargo Profissional no LinkedIn</label>
+          <input type="text" id="socialHeadlineInput" placeholder="Ex: Especialista em Gestão | Analista" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.95rem;" />
+        </div>
+
+        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;font-size:0.82rem;color:var(--muted);line-height:1.45;margin-top:4px;">
+          🔒 <strong>Privacidade e Segurança:</strong> Sua conta fica vinculada diretamente no Adapta Currículo. Seus dados ficam protegidos no seu navegador.
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
+          <button type="button" class="btn btn-ghost btn-sm" id="cancelSocialAuthBtn">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="confirmSocialAuthBtn">Vincular Conta e Continuar →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Convite para instalar -->
+  <div class="install" id="installBar" hidden>
+    <img src="icon.svg" alt="" width="40" height="40" />
+    <div><b>Instale o Adapta Currículo</b><small id="installText">Acesse direto da tela inicial do celular.</small></div>
+    <button class="btn btn-primary btn-sm" id="installBtn">Instalar</button>
+    <button class="install-x" id="installClose" aria-label="Fechar">✕</button>
+  </div>
+
+  <!-- Bibliotecas de leitura e geração de arquivos (PDF.js, Mammoth DOCX, html2canvas, jsPDF, docx) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+  <script src="app.js?v=20261104_1555"></script>
+</body>
+</html>
+

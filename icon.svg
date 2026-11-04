@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F2A44"/>
+      <stop offset="100%" stop-color="#091A2B"/>
+    </linearGradient>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#10B981" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Fundo Arredondado Profissional -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+
+  <!-- Folha do Currículo -->
+  <g transform="translate(110, 85)" filter="url(#shadow)">
+    <!-- Papel base -->
+    <rect width="230" height="310" rx="26" fill="#FFFFFF"/>
+    
+    <!-- Linhas de estrutura do currículo -->
+    <rect x="28" y="34" width="80" height="18" rx="9" fill="#10B981"/>
+    <rect x="28" y="62" width="130" height="10" rx="5" fill="#0F2A44" opacity="0.8"/>
+    
+    <!-- Linhas de experiência -->
+    <rect x="28" y="100" width="174" height="8" rx="4" fill="#CBD5E1"/>
+    <rect x="28" y="120" width="150" height="8" rx="4" fill="#E2E8F0"/>
+    <rect x="28" y="140" width="165" height="8" rx="4" fill="#E2E8F0"/>
+    
+    <rect x="28" y="180" width="174" height="8" rx="4" fill="#CBD5E1"/>
+    <rect x="28" y="200" width="140" height="8" rx="4" fill="#E2E8F0"/>
+    <rect x="28" y="220" width="155" height="8" rx="4" fill="#E2E8F0"/>
+  </g>
+
+  <!-- Selo de Adaptação e Aprovação -->
+  <g transform="translate(345, 345)" filter="url(#badgeShadow)">
+    <circle cx="0" cy="0" r="92" fill="url(#badgeGrad)"/>
+    <circle cx="0" cy="0" r="82" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-opacity="0.3"/>
+    <!-- Visto de Aprovado -->
+    <path d="M-36 0 L-10 26 L42 -30" fill="none" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

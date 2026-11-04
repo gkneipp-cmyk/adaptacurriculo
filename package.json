@@ -1,0 +1,21 @@
+{
+  "name": "adaptacurriculo",
+  "version": "1.0.0",
+  "description": "Adapta Currículo — Envie seu currículo. Saia aprovado.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "curriculo",
+    "ats",
+    "lattes",
+    "cnpq"
+  ],
+  "author": "Guilherme Kneipp",
+  "license": "ISC"
+}
+
