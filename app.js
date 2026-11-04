@@ -372,7 +372,6 @@ function polishFullCV(targetCv) {
 // Carrega estado salvo ou inicia com o exemplo
 let cv = JSON.parse(localStorage.getItem("aprovado_current_cv") || "null") || structuredClone(SAMPLE_CV);
 polishFullCV(cv);
-  initAuthAndDashboard();
 let userPlan = "free"; // Inicia bloqueado até validar a assinatura criptográfica no servidor ("free" | "avulso" | "pro")
 
 // Identificador único de pedido por navegador (evita colisão entre clientes pagando ao mesmo tempo)
@@ -4278,7 +4277,7 @@ function initAuthAndDashboard() {
     const email = (localStorage.getItem("aprovado_user_email") || "").trim();
     const name = (localStorage.getItem("aprovado_user_name") || "").trim();
     const provider = (localStorage.getItem("aprovado_user_provider") || "email").toLowerCase();
-    const currentPlan = localStorage.getItem("aprovado_user_plan") || userPlan || "free";
+    const currentPlan = localStorage.getItem("aprovado_user_plan") || (typeof userPlan !== "undefined" ? userPlan : "free") || "free";
 
     const displayName = name || (email ? email.split("@")[0] : "");
     const providerLabels = {
@@ -4612,6 +4611,7 @@ function initAuthAndDashboard() {
 try {
   polishFullCV(cv);
   saveCurrentState();
+  initAuthAndDashboard();
 } catch (err) {
   console.warn("Init polish:", err);
 }
