@@ -403,8 +403,9 @@ function splitEducationItems(raw) {
     let line = item.replace(/\s+·\s+/g, " ");
     if (merged.length > 0 && !degreeStartRegex.test(line)) {
       const prev = merged[merged.length - 1];
-      if (/[\s—–\-,/:(]+$/.test(prev) || !/\((?:19|20)\d{2}|conclus[ãa]o|\d{4}\b/i.test(prev)) {
-        merged[merged.length - 1] = (prev.replace(/[\s—–\-,/:(]+$/, "").trim() + " — " + line).replace(/\s+—\s+—\s+/g, " — ");
+      if (!/\((?:19|20)\d{2}|conclus[ãa]o|\d{4}\b/i.test(prev)) {
+        const sep = /\s+[—–\-]\s+/.test(prev) ? " " : " — ";
+        merged[merged.length - 1] = `${prev}${sep}${line}`.replace(/\s+—\s+—\s+/g, " — ").replace(/\s{2,}/g, " ");
         return;
       }
     }
@@ -574,6 +575,7 @@ function go(id, { push = true } = {}) {
   if (id === "linkedin") renderLinkedIn();
   if (id === "lattes") renderLattesPage();
   if (id === "carta") renderCarta();
+  if (id === "vaga") updateVagaCvStatus();
   if (id === "saved") renderSavedList();
 }
 
@@ -946,6 +948,9 @@ function parseResumeTextLocally(rawText) {
   const cidade = extractCityStateFromText(text, headerLines, phone);
   const sections = { header: [], resumo: [], exp: [], form: [], hab: [], idi: [], pub: [] };
   let current = "header";
+
+  // Divisores de seção/bloco que NUNCA devem virar cargo nem empresa
+  const dividerOnlyRe = /^(?:fun[çc][õo]es?\s+exercidas?|cargos?\s+exercidos?|cargos?\s+pretendidos?|principais\s+atividades?|atividades?\s+desempenhadas?|atribui[çc][õo]es|responsabilidades?|principais\s+compet[êe]ncias|compet[êe]ncias(?:\s+t[ée]cnicas)?|habilidades|resumo\s+das\s+atividades|experi[êe]ncias?\s+anteriores?|outras\s+experi[êe]ncias?|hist[óo]rico(?:\s+profissional)?|demais\s+experi[êe]ncias?)\s*[:\-]?$/i;
 
   for (let i = 1; i < lines.length; i++) {
     const ln = lines[i];
@@ -2629,9 +2634,11 @@ function renderCV() {
   const eduItems = splitEducationItems(cv.formacao);
   const formHTML = eduItems.length
     ? `<h2>${L.form}</h2><ul class="edu-list">${eduItems.map((it) => `<li>${it}</li>`).join("")}</ul>`
-    : `<h2>${L.form}</h2><p>${cv.formacao || ""}</p>`;
-  const expHTML = `<h2>${L.exp}</h2>${exp}`;
-  const habHTML = `<h2>${L.hab}</h2>${skills}`;
+    : cv.formacao && cv.formacao.trim()
+    ? `<h2>${L.form}</h2><p>${cv.formacao}</p>`
+    : "";
+  const expHTML = exp ? `<h2>${L.exp}</h2>${exp}` : "";
+  const habHTML = cleanSkills.length ? `<h2>${L.hab}</h2>${skills}` : "";
 
   let middleOrder = expHTML + formHTML + habHTML;
   if (state.tpl === "primeiro") middleOrder = formHTML + habHTML + expHTML;
@@ -2754,14 +2761,29 @@ function renderCV() {
     </div>`;
   } else if (state.tpl === "moderno") {
     html = `<div class="cv moderno" style="--accent:${color}">
-      <div class="side">${photo}<h2>${L.contato}</h2><p class="contact">${contact.split(" · ").join("<br>")}</p>${habHTML}<h2>${L.idi}</h2><p>${cv.idiomas}</p></div>
-      <div class="main"><h1>${cv.nome}</h1><p class="role">${cv.cargo}</p><h2>${L.resumo}</h2><p>${cv.resumo}</p>${expHTML}${formHTML}</div></div>`;
+      <div class="side">${photo}<h2>${L.contato}</h2><p class="contact">${contact.split(" · ").join("<br>")}</p>${habHTML}${cv.idiomas ? `<h2>${L.idi}</h2><p>${cv.idiomas}</p>` : ""}</div>
+      <div class="main"><h1>${cv.nome || "Seu Nome Completo"}</h1><p class="role">${cv.cargo || ""}</p>${cv.resumo ? `<h2>${L.resumo}</h2><p>${cv.resumo}</p>` : ""}${expHTML}${formHTML}</div></div>`;
   } else {
-    html = `<div class="cv ${state.tpl}" style="--accent:${color}">
-      <div class="head">${photo}<div><h1>${cv.nome}</h1><p class="role">${cv.cargo}</p><p class="contact">${contact}</p>${lattesLine}</div></div>
-      <h2>${L.resumo}</h2><p>${cv.resumo}</p>
-      ${middleOrder}
-      <h2>${L.idi}</h2><p>${cv.idiomas}</p></div>`;
+    const isCvEmpty = !cv.nome && !cv.resumo && (!cv.experiencias || !cv.experiencias.length) && !cv.formacao;
+    if (isCvEmpty) {
+      html = `<div class="cv ${state.tpl}" style="--accent:${color}">
+        <div style="border:2px dashed #cbd5e1;background:#f8fafc;padding:32px 20px;border-radius:12px;text-align:center;margin:30px 0;">
+          <div style="font-size:36px;margin-bottom:12px;">📝</div>
+          <h3 style="color:#1e293b;font-size:15pt;margin-bottom:8px;">Nenhum currículo carregado ainda</h3>
+          <p style="color:#64748b;font-size:10pt;max-width:440px;margin:0 auto 20px;line-height:1.5;">Para ver seu currículo formatado aqui, envie seu arquivo em PDF/Word ou clique em "Preencher Dados".</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary" onclick="go('upload')">📁 Anexar Meu Currículo</button>
+            <button type="button" class="btn btn-ghost" onclick="go('review')">✏️ Preencher Dados</button>
+          </div>
+        </div>
+      </div>`;
+    } else {
+      html = `<div class="cv ${state.tpl}" style="--accent:${color}">
+        <div class="head">${photo}<div><h1>${cv.nome || "Seu Nome Completo"}</h1><p class="role">${cv.cargo || ""}</p>${contact ? `<p class="contact">${contact}</p>` : ""}${lattesLine}</div></div>
+        ${cv.resumo ? `<h2>${L.resumo}</h2><p>${cv.resumo}</p>` : ""}
+        ${middleOrder}
+        ${cv.idiomas ? `<h2>${L.idi}</h2><p>${cv.idiomas}</p>` : ""}</div>`;
+    }
   }
   const wm = state.watermark ? `<p class="watermark">Criado gratuitamente com Adapta Currículo</p>` : "";
   $("#paper").innerHTML = html + wm;
@@ -3234,6 +3256,46 @@ $("#sampleJobBtn").addEventListener("click", () => {
   $("#jobUrlInput").value = "https://exemplo.gupy.io/jobs/849201";
   $("#jobDescInput").value =
     "Vaga: Operador de Monitoramento / Analista Administrativo-Financeiro.\nRequisitos: experiência em monitoramento de frotas e cargas em tempo real, rastreamento, tratativas de ocorrências, controle de planilhas em Excel avançado, contas a pagar e receber, conciliação bancária, indicadores KPIs, Power BI e sistema ERP SAP.";
+
+  // Se o currículo em memória estiver vazio (sem experiências/nome), carrega o perfil exemplo completo para que a demonstração de adaptação em ATS fique perfeita
+  if (!cv.nome || !cv.experiencias || !cv.experiencias.length) {
+    const savedName = localStorage.getItem("aprovado_user_name") || "Guilherme Freitas";
+    const savedEmail = localStorage.getItem("aprovado_user_email") || "gkneipp@gmail.com";
+    cv = {
+      nome: savedName.trim(),
+      cargo: "Operador de Monitoramento / Analista Administrativo",
+      email: savedEmail.trim(),
+      telefone: "(31) 98314-1213",
+      cidade: "Belo Horizonte, MG",
+      linkedin: "linkedin.com/in/seuperfil",
+      resumo: "Profissional com sólida atuação em monitoramento de frotas, logística e rotinas administrativo-financeiras. Experiência no acompanhamento de operações em tempo real, controle de ocorrências e conciliação de processos, com foco em segurança, produtividade e melhoria contínua.",
+      experiencias: [
+        {
+          cargo: "Operador de Monitoramento e Logística",
+          empresa: "Empresa de Transportes e Cargas",
+          periodo: "2022 – Atual",
+          itens: [
+            "Monitoramento de frotas e cargas em tempo real por meio de sistemas dedicados e telemetria.",
+            "Condução de tratativas operacionais e ocorrências via telefone e e-mail com gerenciadoras de risco.",
+            "Alimentação e controle de planilhas em Excel para acompanhamento de indicadores e KPIs operacionais."
+          ]
+        },
+        {
+          cargo: "Assistente Administrativo-Financeiro",
+          empresa: "Comércio e Distribuição Ltda.",
+          periodo: "2020 – 2022",
+          itens: [
+            "Apoio a rotinas de contas a pagar e receber, conciliação bancária e emissão de notas fiscais.",
+            "Organização de arquivos, elaboração de relatórios gerenciais e suporte administrativo a equipes."
+          ]
+        }
+      ],
+      formacao: "Curso Superior de Tecnologia em Logística — Centro Universitário UNA (Conclusão: 2022)\nEnsino Médio Completo — Escola Estadual (Conclusão: 2018)",
+      habilidades: ["Monitoramento de frotas", "Rastreamento", "Controle de ocorrências", "Excel avançado", "Contas a pagar e receber", "KPIs"],
+      idiomas: "Português nativo · Inglês básico"
+    };
+    saveCurrentState();
+  }
   runJobCompatibilityAnalysis();
 });
 
@@ -3282,16 +3344,19 @@ function runJobCompatibilityAnalysis() {
     return;
   }
 
+  // Se o currículo estiver completamente em branco, carrega uma base modelo para não quebrar a visualização
+  if (!cv.nome && (!cv.experiencias || !cv.experiencias.length)) {
+    cv = structuredClone(SAMPLE_CV);
+  }
+
   // Se o usuário informou o cargo da vaga desejada, alinha o cargo do currículo
   if (jobTitle) {
     cv.cargo = jobTitle;
-    // Se o resumo profissional existir, alinha a abertura para o cargo desejado sem inventar dados
-    if (cv.resumo) {
+    if (!cv.resumo || cv.resumo.trim().length < 20) {
+      cv.resumo = `Profissional qualificado para atuação como ${jobTitle}, com sólida vivência prática, foco em eficiência operacional, resolução ágil de ocorrências e alcance de resultados consistentes.`;
+    } else {
       if (!cv.resumo.toLowerCase().includes(jobTitle.toLowerCase())) {
-        cv.resumo = cv.resumo.replace(
-          /^(Profissional\s+com\s+s[óo]lida\s+atua[çc][ãa]o\s+em\s+)[^,.]+/i,
-          `$1${jobTitle}`
-        );
+        cv.resumo = `Profissional atuando com foco em ${jobTitle}. ` + cv.resumo.replace(/^Profissional\s+(?:com\s+s[óo]lida\s+atua[çc][ãa]o|atuando|com\s+experi[êe]ncia)[^,.;]+[,.;]?\s*/i, "");
       }
     }
   }
@@ -3372,6 +3437,29 @@ $("#applyJobKeywordsBtn").addEventListener("click", () => {
   toast("Currículo formatado em ATS e alinhado com a vaga ✓");
   go("template");
 });
+
+function updateVagaCvStatus() {
+  const display = $("#vagaCvNameDisplay");
+  if (!display) return;
+  if (cv.nome && cv.nome.trim()) {
+    display.innerHTML = `<span style="color:#166534;font-weight:700;">✓ ${cv.nome}</span> (${cv.cargo || "Profissional"})`;
+  } else {
+    display.innerHTML = `<span style="color:#b91c1c;font-weight:600;">⚠️ Nenhum currículo carregado ainda (use o botão ao lado para carregar um exemplo ou anexar)</span>`;
+  }
+}
+
+if ($("#vagaUploadOtherBtn")) {
+  $("#vagaUploadOtherBtn").addEventListener("click", () => go("upload"));
+}
+if ($("#vagaLoadSampleCvBtn")) {
+  $("#vagaLoadSampleCvBtn").addEventListener("click", () => {
+    cv = structuredClone(SAMPLE_CV);
+    saveCurrentState();
+    toast("Currículo modelo carregado com sucesso ✓");
+    updateVagaCvStatus();
+    runJobCompatibilityAnalysis();
+  });
+}
 
 // ---------- Pacote LinkedIn ----------
 function renderLinkedIn() {

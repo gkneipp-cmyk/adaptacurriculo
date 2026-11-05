@@ -589,6 +589,16 @@
     <div class="wizard wide">
       <h2>🎯 Adaptar Currículo para a Vaga Desejada</h2>
       <p class="muted">Informe o <strong>cargo pretendido</strong> e a <strong>descrição da vaga</strong>. O sistema cruza os requisitos com o seu histórico, ajusta o resumo profissional e formata seu currículo direto no modelo <strong>ATS</strong> para você ser chamado para a entrevista.</p>
+      
+      <div class="vaga-cv-status-box" id="vagaCvStatusBox" style="background:#f8fafc;border:1px solid #e2e8f0;padding:10px 14px;border-radius:8px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div style="font-size:0.9rem;color:#334155;">
+          <span>Currículo ativo para adaptação: <strong id="vagaCvNameDisplay">Nenhum currículo carregado</strong></span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn btn-ghost btn-xs" id="vagaUploadOtherBtn">📁 Anexar outro currículo</button>
+          <button type="button" class="btn btn-ghost btn-xs" id="vagaLoadSampleCvBtn">📄 Usar exemplo</button>
+        </div>
+      </div>
       <div class="vaga-grid">
         <div>
           <label class="vaga-lbl">🎯 Nome / Cargo da vaga pretendida
@@ -965,7 +975,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-  <script src="app.js?v=20261104_2330"></script>
+  <script src="app.js?v=20261105_0005"></script>
 </body>
 </html>
 
