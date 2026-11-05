@@ -243,30 +243,43 @@ const isRealCityUfLine = (ln) => {
   return BRAZIL_UFS.has(m[2].toUpperCase());
 };
 
+const LOCATION_WORDS = new Set([
+  "belo", "horizonte", "minas", "gerais", "mg", "bh",
+  "sao", "paulo", "sp", "rio", "janeiro", "rj",
+  "brasil", "brazil", "curitiba", "pr", "porto", "alegre", "rs",
+  "salvador", "ba", "recife", "pe", "fortaleza", "ce", "brasilia", "df",
+  "goiania", "go", "florianopolis", "sc", "vitoria", "es", "manaus", "am",
+  "belem", "pa", "campinas", "centro", "bairro", "remoto", "hibrido", "presencial"
+]);
+
 const isLocationText = (s) => {
   let n = normTxt(s).replace(/[()\[\]]/g, " ").replace(/\s+/g, " ").trim();
   if (!n || n.length > 60) return false;
+  if (LOCATION_WORDS.has(n)) return true;
   n = n.replace(/\s*[-–—,\/|]\s*(brasil|brazil)$/, "").trim();
   for (const st of STATE_NAMES) {
     const re = new RegExp("(?:\\s*[-–—,\\/|]\\s*|\\s+)" + st + "$");
     if (n !== st && re.test(n)) { n = n.replace(re, "").trim(); break; }
   }
   n = n.replace(/\s*[-–—,\/|]\s*[a-z]{2}$/, "").replace(/\s+[a-z]{2}$/, (m) => (BRAZIL_UFS.has(m.trim().toUpperCase()) ? "" : m)).trim();
-  if (!n) return false;
-  if (KNOWN_CITIES.has(n) || STATE_NAMES.includes(n)) return true;
+  if (!n) return true;
+  if (KNOWN_CITIES.has(n) || STATE_NAMES.includes(n) || LOCATION_WORDS.has(n)) return true;
   return isRealCityUfLine(s);
 };
 
 const stripTrailingLocation = (t) => {
   let cur = (t || "").trim();
   for (let i = 0; i < 3; i++) {
-    const seps = [...cur.matchAll(/\s+[-–—|]\s+|\s*,\s+|\s*\/\s*|\s*\(/g)];
+    const seps = [...cur.matchAll(/\s+[-–—|]\s+|\s*,\s+|\s*\/(?=\s*[A-Za-z]{2}(?:\b|\s|$))|\s*\(/g)];
     if (!seps.length) break;
     const last = seps[seps.length - 1];
     const tail = cur.slice(last.index + last[0].length).replace(/\)$/, "").trim();
     const head = cur.slice(0, last.index).trim();
-    if (head && (isLocationText(tail) || (/^[A-Za-z]{2}$/.test(tail) && BRAZIL_UFS.has(tail.toUpperCase())))) cur = head;
-    else break;
+    if (head && (isLocationText(tail) || (/^[A-Za-z]{2}$/.test(tail) && BRAZIL_UFS.has(tail.toUpperCase())) || LOCATION_WORDS.has(normTxt(tail)))) {
+      cur = head;
+    } else {
+      break;
+    }
   }
   return cur;
 };
@@ -928,22 +941,24 @@ function parseResumeTextLocally(rawText) {
     // Rótulos explícitos inequívocos
     const empresaLabelRe = /^(?:empresa|institui[çc][ãa]o|companhia|empregador|organiza[çc][ãa]o)\s*[:\-]\s*(.+)$/i;
     const cargoLabelRe = /^(?:cargo|fun[çc][ãa]o(?:\s+exercida)?|cargo(?:\s+ocupado|\s+pretendido)?|atua[çc][ãa]o(?:\s+como)?|posi[çc][ãa]o)\s*[:\-]\s*(.+)$/i;
-    const dividerOnlyRe = /^(?:fun[çc][õo]es?\s+exercidas?|cargos?\s+exercidos?|cargos?\s+pretendidos?|principais\s+atividades?|atividades?\s+desempenhadas?|responsabilidades?|experi[êe]ncias?\s+anteriores?|hist[óo]rico)\s*[:\-]?$/i;
+    
+    // Divisores de seção/bloco que NUNCA devem virar cargo nem empresa
+    const dividerOnlyRe = /^(?:fun[çc][õo]es?\s+exercidas?|cargos?\s+exercidos?|cargos?\s+pretendidos?|principais\s+atividades?|atividades?\s+desempenhadas?|atribui[çc][õo]es|responsabilidades?|principais\s+compet[êe]ncias|compet[êe]ncias(?:\s+t[ée]cnicas)?|habilidades|resumo\s+das\s+atividades|experi[êe]ncias?\s+anteriores?|outras\s+experi[êe]ncias?|hist[óo]rico(?:\s+profissional)?|demais\s+experi[êe]ncias?)\s*[:\-]?$/i;
+    const activityPrefixRe = /^(?:principais\s+compet[êe]ncias|compet[êe]ncias(?:\s+t[ée]cnicas)?|principais\s+atividades?|atividades?\s+desempenhadas?|atribui[çc][õo]es|responsabilidades?|resumo\s+das\s+atividades)\s*[:\-]\s*(.*)$/i;
 
     const isCargoLike = (s) => {
       if (!s) return false;
       const str = s.trim();
       if (/[.!?;]$/.test(str) && !companySuffixRe.test(str)) return false;
-      if (str.split(/\s+/).length > 8) return false;
-      return /\b(analista|engenheir[oa]|desenvolvedor[a]?|developer|engineer|especialista|specialist|gerente|manager|coordenador[a]?|coordinator|supervisor[a]?|t[ée]cnic[oa]|technician|assistente|assistant|consultor[a]?|consultant|diretor[a]?|director|administrador[a]?|administrator|estagi[áa]ri[oa]|intern|operador[a]?|operator|arquiteto|arquiteta|architect|l[íi]der|lead|auxiliar|programador[a]?|vendedor[a]?|sales|atendente|motorista|designer|product|head|recepcionista|caixa|conferente|estoquista|repositor[a]?|ajudante|balconista|suporte|digitador[a]?|atendimento|telefonista|telemarketing|secret[áa]ri[oa]|vigilante|porteiro|zelador[a]?|advogad[oa]|psic[óo]log[oa]|contador[a]?|auditor[a]?)\b/i.test(str);
+      if (str.split(/\s+/).length > 9) return false;
+      if (dividerOnlyRe.test(str)) return false;
+      return /\b(analista|engenheir[oa]|desenvolvedor[a]?|developer|engineer|especialista|specialist|gerente|manager|coordenador[a]?|coordinator|supervisor[a]?|t[ée]cnic[oa]|technician|assistente|assistant|consultor[a]?|consultant|diretor[a]?|director|administrador[a]?|administrator|estagi[áa]ri[oa]|intern|operador[a]?|operator|arquiteto|arquiteta|architect|l[íi]der|lead|auxiliar|programador[a]?|vendedor[a]?|sales|atendente|motorista|designer|product|head|recepcionista|caixa|conferente|estoquista|repositor[a]?|ajudante|balconista|suporte|digitador[a]?|atendimento|telefonista|telemarketing|secret[áa]ri[oa]|vigilante|porteiro|zelador[a]?|advogad[oa]|psic[óo]log[oa]|contador[a]?|auditor[a]?|agent|agente|cx\s+agent|customer\s+experience|customer\s+service|customer\s+success|relacionamento|preposto|backoffice|helpdesk|service\s+desk|onboarding|opera[çc][õo]es)\b/i.test(str);
     };
 
     const isActionOrBullet = (s) => {
       if (/^[•\-*▪▸]/.test(s)) return true;
-      if (s.length > 55 || /[.!?]$/.test(s)) return true;
-      if (/^(atua[çc][ãa]o|organiza[çc][ãa]o|cumprimento|trabalho|apoio|controle|atendimento|lideran[çc]a|acompanhamento|resolu[çc][ãa]o|comunica[çc][ãa]o|orienta[çc][ãa]o|tomada|suporte|execu[çc][ãa]o|desenvolvimento|gest[ãa]o|elabora[çc][ãa]o|manuten[çc][ãa]o|administra[çc][ãa]o|implementa[çc][ãa]o|respons[áa]vel|cria[çc][ãa]o|configura[çc][ãa]o|monitoramento|participa[çc][ãa]o|realiza[çc][ãa]o|condu[çc][ãa]o|treinamento|an[áa]lise|planejamento|garantia|recep[çc][ãa]o|agendamento|emiss[ãa]o|armazenamento|carga|descarga|separa[çc][ãa]o|confer[êe]ncia|led|managed|developed|created|implemented|responsible|assisted|monitored|conducted|designed|maintained)\b/i.test(s)) {
-        return true;
-      }
+      if (s.length > 55 || (/[.!?]$/.test(s) && !/\.{2,}$/.test(s) && !companySuffixRe.test(s))) return true;
+      if (actionVerbStart.test(s)) return true;
       return false;
     };
 
@@ -957,7 +972,7 @@ function parseResumeTextLocally(rawText) {
       let resolvedCargo = isCargoLike(pendingExplicitCargo) ? pendingExplicitCargo : "";
       let resolvedEmpresa = isCompanyLike(pendingExplicitEmpresa) ? pendingExplicitEmpresa : "";
 
-      pendingHeaders = pendingHeaders.filter((h) => !isLocationText(h) && !isRealCityUfLine(h));
+      pendingHeaders = pendingHeaders.filter((h) => !isLocationText(h) && !isRealCityUfLine(h) && !dividerOnlyRe.test(h));
 
       if (!resolvedEmpresa && pendingHeaders.length > 0) {
         if (pendingHeaders.length === 1) {
@@ -994,7 +1009,7 @@ function parseResumeTextLocally(rawText) {
         resolvedEmpresa = "";
       }
       if (resolvedCargo && !isCargoLike(resolvedCargo) && resolvedCargo !== cargo) {
-        if (actionVerbStart.test(resolvedCargo) || resolvedCargo.length > 70) resolvedCargo = "";
+        if (actionVerbStart.test(resolvedCargo) || resolvedCargo.length > 70 || dividerOnlyRe.test(resolvedCargo)) resolvedCargo = "";
       }
 
       if (resolvedEmpresa && isCompanyLike(resolvedEmpresa)) currentCompany = resolvedEmpresa;
@@ -1018,8 +1033,11 @@ function parseResumeTextLocally(rawText) {
       if (!s || typeof s !== "string") return false;
       const t = s.trim().replace(/^[\s—–\-|:,;()]+|[\s—–\-|:,;()]+$/g, "");
       if (!t || t.length < 2 || t.length > 70) return false;
-      if (/[.!?;:]$/.test(t) && !/\b(ltda|s\.?\s?a|inc|llc|eireli|corp|co|cia)\.?$/i.test(t)) return false;
-      if (isLocationText(t) || isRealCityUfLine(t)) return false;
+      if (/[.!?;:]$/.test(t) && !companySuffixRe.test(t) && !/\.{2,}$/.test(t)) return false;
+      const n = normTxt(t);
+      if (LOCATION_WORDS.has(n) || isLocationText(t) || isRealCityUfLine(t)) return false;
+      if (dividerOnlyRe.test(t)) return false;
+      if (/^(principais|competencias|habilidades|atividades|responsabilidades|atribuicoes|experiencias|historico|funcoes|cargos|resumo|objetivo|outras)\b/i.test(t)) return false;
       if (actionVerbStart.test(t)) return false;
       if (/^(uso|conhecimento|experi[êe]ncia|dom[íi]nio|viv[êe]ncia|atua[çc][ãa]o|gest[ãa]o|controle|administra[çc][ãa]o|automa[çc][ãa]o|monitoramento|disponibilidade|seguran[çc]a|rotinas?|processos?|atividades?|responsabilidades?)\b/i.test(t)) return false;
       if (/\b(pacote\s+office|office|excel|word|powerpoint|powershell|linux|windows|zabbix|vmware|aws|cloud|python|sql|mysql|oracle|postgre|banco\s+de\s+dados|audi[êe]ncias|relat[óo]rios|notas\s+fiscais)\b/i.test(t)) return false;
@@ -1034,7 +1052,8 @@ function parseResumeTextLocally(rawText) {
     // Linha curta com cara de título (empresa/cargo), sem pontuação final de frase
     const looksLikeHeader = (s) => {
       if (!s || s.length > 70) return false;
-      if (/[.!?;]$/.test(s) && !companySuffixRe.test(s)) return false;
+      if (dividerOnlyRe.test(s)) return false;
+      if (/[.!?;]$/.test(s) && !companySuffixRe.test(s) && !/\.{2,}$/.test(s)) return false;
       if (/^(uso|conhecimento|experi[êe]ncia)\b/i.test(s) && !isCargoLike(s)) return false;
       return true;
     };
@@ -1048,7 +1067,7 @@ function parseResumeTextLocally(rawText) {
 
       // 1. Empresa: Cargo ou Cargo: Empresa
       const colon = t.match(/^([^:]{2,60}?)\s*:\s*(.{2,90})$/);
-      if (colon && !/^(per[íi]odo|data|datas|cargo|fun[çc][ãa]o|empresa|respons[áa]vel|atividades?)$/i.test(colon[1].trim())) {
+      if (colon && !/^(per[íi]odo|data|datas|cargo|fun[çc][ãa]o|empresa|respons[áa]vel|atividades?|principais)\b/i.test(colon[1].trim())) {
         const left = colon[1].trim();
         const right = colon[2].trim();
         if (isCargoLike(left) && isCompanyLike(right)) return { cargo: left, empresa: right };
@@ -1107,7 +1126,21 @@ function parseResumeTextLocally(rawText) {
         continue;
       }
 
-      // 2. Se a linha for apenas rótulo divisor ou cidade legítima, ignora
+      // 2. Se for prefixo de atividades ("Principais Competências: Atendimento..."), joga o texto para itens e não cria card novo
+      const actPrefixMatch = rawLn.match(activityPrefixRe);
+      if (actPrefixMatch) {
+        const remaining = actPrefixMatch[1].trim();
+        if (remaining) {
+          if (!currentExp) {
+            currentExp = { cargo: cargo || "Profissional", empresa: currentCompany || "", periodo: "", itens: [] };
+            experiencias.push(currentExp);
+          }
+          currentExp.itens.push(stripBullet(remaining));
+        }
+        continue;
+      }
+
+      // 3. Se a linha for apenas divisor ("PRINCIPAIS COMPETÊNCIAS", "Atividades:", etc.) ou cidade, ignora
       if (dividerOnlyRe.test(rawLn) || isRealCityUfLine(rawLn) || isLocationText(stripBullet(rawLn))) {
         continue;
       }
@@ -1116,8 +1149,8 @@ function parseResumeTextLocally(rawText) {
       const unbulleted = stripBullet(rawLn);
       const dateMatch = unbulleted.match(dateRangeRe);
 
-      // Linha com marcador que descreve uma atividade (e por acaso contém um ano) continua sendo item, não cabeçalho
-      const bulletIsActivity = dateMatch && hasBullet && (actionVerbStart.test(unbulleted) || unbulleted.slice(0, dateMatch.index).trim().length > 90);
+      // Linha com marcador só é considerada atividade se tiver texto longo antes da data (> 85 chars, ex.: parágrafo descritivo)
+      const bulletIsActivity = dateMatch && hasBullet && (unbulleted.slice(0, dateMatch.index).trim().length > 85);
 
       if (dateMatch && !bulletIsActivity) {
         const periodo = dateMatch[1].trim();
@@ -1153,12 +1186,6 @@ function parseResumeTextLocally(rawText) {
         }
 
         let finalEmpresa = (isCompanyLike(inlineEmpresa) ? inlineEmpresa : "") || resolved.empresa || (isCompanyLike(currentCompany) ? currentCompany : "");
-        const nextAfterDate = sections.exp[idx + 1] ? sections.exp[idx + 1].trim() : "";
-        const nextAfterUnb = stripBullet(nextAfterDate);
-        if (finalEmpresa && nextAfterUnb && !bulletRe.test(nextAfterDate) && !dateRangeRe.test(nextAfterUnb) && !isCargoLike(nextAfterUnb) && isCompanyLike(finalEmpresa + " " + nextAfterUnb)) {
-          finalEmpresa = finalEmpresa + " " + nextAfterUnb;
-          idx++;
-        }
         if (finalEmpresa && isCompanyLike(finalEmpresa)) currentCompany = finalEmpresa;
 
         const finalCargo = inlineCargo || resolved.cargo || cargo || "Profissional";
@@ -1266,7 +1293,7 @@ function parseResumeTextLocally(rawText) {
             experiencias.push(currentExp);
             continue;
           }
-        } else if (headerShaped && followedByHeaderCue) {
+        } else if (followedByHeaderCue || (headerShaped && !currentExp)) {
           // Cabeçalho de Empresa ou Cargo (ex.: "Loja Elétrica Ltda.", "iT.eam")
           pendingHeaders.push(stripTrailingLocation(unbulleted));
         } else if (currentExp && (startsLower || prevIncomplete) && !isCargoLike(unbulleted)) {
