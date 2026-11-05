@@ -16,6 +16,8 @@
     "cnpq"
   ],
   "author": "Guilherme Kneipp",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "pdfjs-dist": "^6.5.438"
+  }
 }
-

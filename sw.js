@@ -1,5 +1,5 @@
 // Service worker: permite instalar o app e abrir as telas mesmo com internet fraca.
-const CACHE = "aprovado-v18";
+const CACHE = "aprovado-v19";
 const FILES = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.json", "./icon.svg", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {

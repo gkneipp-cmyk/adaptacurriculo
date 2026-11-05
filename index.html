@@ -7,7 +7,7 @@
   <meta name="description" content="Adapte seu currículo para qualquer vaga: formato ATS oficial para robôs de recrutamento e padrão Lattes CNPq." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261104_1720" />
+  <link rel="stylesheet" href="styles.css?v=20261105_0930" />
   <script>
     if (window.history && 'scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
     if (window.location.hash && !window.location.hash.startsWith('#cv=') && window.location.hash !== '#admin') {
@@ -323,14 +323,14 @@
           </div>
         </div>
 
-        <!-- Card 3: Perfil para o LinkedIn -->
+        <!-- Card 3: Importar Perfil do LinkedIn -->
         <div class="dash-card">
-          <span class="dash-card-badge li">Destaque nas Buscas</span>
+          <span class="dash-card-badge li">100% Automático · Sem Erros</span>
           <div class="dash-card-icon">💼</div>
-          <h3>Criar Perfil para o LinkedIn</h3>
-          <p>Gere títulos estratégicos, resumo 'Sobre' impactante e lista de competências prontas para copiar e colar no seu perfil do LinkedIn.</p>
+          <h3>Importar Perfil do LinkedIn (PDF)</h3>
+          <p>Baixe o PDF do seu perfil no LinkedIn com 2 cliques e envie aqui. O sistema extrai 100% do seu histórico e gera seu currículo no padrão ATS sem erros.</p>
           <div class="dash-card-actions">
-            <button type="button" class="btn btn-primary" id="dashLinkedinBtn">Criar Perfil LinkedIn →</button>
+            <button type="button" class="btn btn-primary" id="dashLinkedinBtn">Importar do LinkedIn (PDF) →</button>
           </div>
         </div>
 
@@ -370,6 +370,18 @@
         <div class="drop-icon">⬆</div>
         <p><strong>Arraste seu arquivo aqui</strong> ou clique para escolher</p>
         <span class="muted">PDF, Word (.docx, .doc), TXT ou Foto · Leitura instantânea no navegador</span>
+      </div>
+
+      <!-- Banner de Importação Direta do LinkedIn -->
+      <div class="linkedin-quick-banner" style="margin-top:16px;background:linear-gradient(135deg, #f0f7ff, #e6f0fa);border:1.5px solid #0077b5;border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:1.8rem;line-height:1;">💼</span>
+          <div>
+            <strong style="color:#0077b5;font-size:0.96rem;display:block;">Tem perfil no LinkedIn?</strong>
+            <span style="font-size:0.85rem;color:var(--text-muted);">Baixe seu perfil oficial em PDF com 2 cliques e converta em currículo ATS sem digitar nada.</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" id="uploadGoLinkedInBtn" style="background:#0077b5;border-color:#0077b5;white-space:nowrap;padding:8px 16px;">Importar do LinkedIn (PDF) →</button>
       </div>
 
       <details class="paste-box">
@@ -572,7 +584,7 @@
             <button class="btn btn-ghost btn-sm" id="copyLinkDirectBtn" type="button">🔗 Copiar link</button>
             <button class="btn btn-ghost btn-sm" data-go="review" type="button">✏️ Editar dados</button>
             <button class="btn btn-ghost btn-sm" data-go="vaga" type="button">🎯 Ajustar p/ Vaga</button>
-            <button class="btn btn-ghost btn-sm" data-go="linkedin" type="button">💼 LinkedIn</button>
+            <button class="btn btn-ghost btn-sm" data-go="linkedin" type="button">💼 Importar LinkedIn</button>
             <button class="btn btn-ghost btn-sm" data-go="lattes" type="button">🎓 Lattes CNPq</button>
             <button class="btn btn-ghost btn-sm" data-go="carta" type="button">✉️ E-mail / Carta</button>
             <button class="btn btn-ghost btn-sm" id="whatsBtn" type="button">💬 WhatsApp</button>
@@ -635,18 +647,66 @@
     </div>
   </main>
 
-  <!-- TELA: LinkedIn -->
+  <!-- TELA: Importar Perfil do LinkedIn (PDF Oficial) -->
   <main id="linkedin" class="screen">
     <div class="wizard wide">
       <div class="review-header">
         <div>
-          <h2>Pacote LinkedIn Campeão</h2>
-          <p class="muted">Textos estratégicos gerados a partir de 100% do seu currículo para atrair recrutadores nas buscas.</p>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(0,119,181,0.1);color:#0077b5;padding:4px 12px;border-radius:20px;font-weight:700;font-size:0.82rem;margin-bottom:8px;">
+            <span>💼</span> Importador Oficial de Perfil LinkedIn
+          </div>
+          <h2>Transformar Perfil do LinkedIn em Currículo ATS</h2>
+          <p class="muted">Baixe o PDF oficial do seu LinkedIn com 2 cliques e envie aqui. O sistema extrai 100% das suas experiências, formação e competências e gera seu currículo no padrão ATS pronto para aprovação, sem você precisar redigitar nada.</p>
         </div>
-        <button class="btn btn-primary btn-sm" id="copyAllLiBtn" type="button">Copiar tudo</button>
       </div>
-      <div id="liBlocks"></div>
-      <div class="actions"><button class="btn btn-ghost" data-go="template">← Voltar ao currículo</button></div>
+
+      <!-- Passo a passo visual de como salvar o PDF no LinkedIn -->
+      <div class="linkedin-steps-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:14px;margin:20px 0 24px 0;">
+        <div class="step-card" style="background:var(--white, #fff);border:1.5px solid var(--border, #e2e8f0);border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="width:28px;height:28px;border-radius:50%;background:#0077b5;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;">1</span>
+            <strong style="font-size:0.95rem;color:var(--navy, #0f2a44);">Abra seu LinkedIn</strong>
+          </div>
+          <p style="font-size:0.85rem;color:var(--text-muted, #64748b);margin:0;line-height:1.4;">No computador ou celular, abra sua página de <strong>Perfil</strong> no LinkedIn.</p>
+        </div>
+
+        <div class="step-card" style="background:var(--white, #fff);border:1.5px solid var(--border, #e2e8f0);border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="width:28px;height:28px;border-radius:50%;background:#0077b5;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;">2</span>
+            <strong style="font-size:0.95rem;color:var(--navy, #0f2a44);">Clique em 'Mais'</strong>
+          </div>
+          <p style="font-size:0.85rem;color:var(--text-muted, #64748b);margin:0;line-height:1.4;">Abaixo da sua foto/título, clique no botão <strong>Mais</strong> (ou <strong>...</strong>) e selecione <strong>Salvar como PDF</strong>.</p>
+        </div>
+
+        <div class="step-card" style="background:var(--white, #fff);border:1.5px solid var(--border, #e2e8f0);border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="width:28px;height:28px;border-radius:50%;background:#0077b5;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;">3</span>
+            <strong style="font-size:0.95rem;color:var(--navy, #0f2a44);">Envie o arquivo aqui</strong>
+          </div>
+          <p style="font-size:0.85rem;color:var(--text-muted, #64748b);margin:0;line-height:1.4;">Arraste ou selecione o arquivo baixado no campo abaixo. O sistema monta seu currículo ATS na hora!</p>
+        </div>
+      </div>
+
+      <!-- Área de Upload Dedicada para o LinkedIn -->
+      <div class="drop linkedin-drop" id="linkedinDrop" role="button" tabindex="0" title="Clique ou arraste seu PDF do LinkedIn aqui" style="border:2px dashed #0077b5;background:#f8fbff;padding:44px 20px;text-align:center;cursor:pointer;border-radius:18px;transition:all .2s ease;">
+        <input type="file" id="linkedinFile" accept=".pdf" style="display:none;" />
+        <div style="font-size:3rem;margin-bottom:12px;line-height:1;">📄</div>
+        <p style="font-size:1.15rem;font-weight:700;color:var(--navy, #0f2a44);margin:0 0 6px 0;">Arraste aqui o PDF do seu perfil do LinkedIn</p>
+        <p style="font-size:0.9rem;color:var(--text-muted, #64748b);margin:0 0 18px 0;">Ou clique neste campo para selecionar o arquivo no seu computador ou celular</p>
+        <button type="button" class="btn btn-primary" id="linkedinSelectBtn" style="background:#0077b5;border-color:#0077b5;pointer-events:none;padding:12px 24px;font-size:0.95rem;">Escolher Arquivo PDF do LinkedIn</button>
+      </div>
+
+      <!-- Status / Loading da Leitura do LinkedIn -->
+      <div class="loading" id="linkedinLoading" hidden style="margin-top:24px;text-align:center;">
+        <div class="spinner"></div>
+        <p id="linkedinLoadingText" style="font-weight:600;margin-top:12px;color:var(--navy, #0f2a44);font-size:1rem;">Lendo perfil do LinkedIn e estruturando dados ATS...</p>
+      </div>
+
+      <!-- Barra de opções inferiores -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:28px;flex-wrap:wrap;gap:12px;">
+        <button class="btn btn-ghost" data-go="dashboard" type="button">← Voltar ao Início</button>
+        <button class="link" id="linkedinUseSampleBtn" type="button" style="font-size:0.88rem;color:#0077b5;font-weight:600;text-decoration:underline;">💼 Testar agora com perfil de exemplo do LinkedIn (11 experiências)</button>
+      </div>
     </div>
   </main>
 
@@ -975,7 +1035,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-  <script src="app.js?v=20261105_0005"></script>
+  <script src="app.js?v=20261105_0930"></script>
 </body>
 </html>
 

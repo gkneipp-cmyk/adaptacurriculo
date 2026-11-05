@@ -738,6 +738,430 @@ $("#homeTemplates").addEventListener("click", (e) => {
   go("template");
 });
 
+// ---------- Leitor e Extrator Especializado de Perfil do LinkedIn (PDF Oficial) ----------
+const SAMPLE_LINKEDIN_CV = {
+  nome: "Guilherme Freitas",
+  cargo: "Assistente de Relacionamento com o Cliente",
+  email: "gkneipp@gmail.com",
+  telefone: "(31) 98314-1213",
+  cidade: "Belo Horizonte, Minas Gerais",
+  linkedin: "linkedin.com/in/guilherme-freitas-88b8ab227",
+  resumo: "Profissional com sólida experiência nas áreas de Customer Experience (CX), Atendimento ao Cliente e Suporte Operacional, com passagens por empresas de referência nos setores de tecnologia e mobilidade urbana. Vivência prática na gestão da jornada do cliente (pré-onboarding, onboarding e ongoing), suporte multicanal humanizado (e-mail, chat e WhatsApp), acompanhamento de pós-venda, administração de contratos, tratativa de casos críticos e negociação. Familiaridade com ferramentas como Salesforce, Zendesk e Blip. Graduação tecnológica em Comunicação Institucional, voltada para o relacionamento das organizações com seus públicos interno e externo, proporcionando uma visão estratégica em CX para retenção e fidelização.",
+  experiencias: [
+    {
+      empresa: "Localiza&Co",
+      cargo: "Assistente de relacionamento com o cliente",
+      periodo: "abril de 2025 - junho de 2026",
+      itens: [
+        "Atuação na gestão da jornada pós-venda e no onboarding de clientes, garantindo uma experiência fluida desde a ativação até a fidelização.",
+        "Responsável pelo atendimento multicanal (e-mail e WhatsApp), com foco em excelência, resolução ágil de demandas e fortalecimento do relacionamento com o cliente.",
+        "Experiência em negociação de débitos e suporte em serviços, além do acompanhamento de sinistros, manutenções e reparos.",
+        "Realização de interface entre clientes e áreas técnicas de nível N2 por meio do Salesforce, assegurando assertividade nas tratativas.",
+        "Monitoramento contínuo de indicadores, como SLA e NPS, visando melhoria contínua dos processos, sempre em conformidade com políticas internas e diretrizes da LGPD."
+      ]
+    },
+    {
+      empresa: "Hotmart",
+      cargo: "Customer Experience Agent I",
+      periodo: "junho de 2024 - março de 2025",
+      itens: [
+        "Atuação no atendimento ao cliente por meio de chat e e-mail, utilizando a plataforma Zendesk, garantindo suporte ágil e eficiente.",
+        "Responsável por auxiliar na criação e configuração de produtos na plataforma, contribuindo para a melhor experiência do usuário.",
+        "Experiência na análise de causa raiz de problemas e tratamento de reclamações, com foco na proposição de melhorias contínuas na jornada do cliente.",
+        "Interpretação de métricas operacionais e indicadores de desempenho, como SLA e CSAT, para acompanhamento de resultados e otimização de processos.",
+        "Aplicação rigorosa de políticas internas e termos de uso, assegurando conformidade e qualidade no atendimento."
+      ]
+    },
+    {
+      empresa: "Empresa de Transportes Martins",
+      cargo: "Operador de monitoramento",
+      periodo: "abril de 2023 - junho de 2024",
+      itens: [
+        "Atuação no monitoramento de veículos em tempo real por meio de sistemas especializados, com gestão de ocorrências via telefone e e-mail em conjunto com a gerenciadora de riscos.",
+        "Responsável pelo acionamento de áreas internas e externas diante de anormalidades nas viagens, garantindo respostas rápidas e aderência aos protocolos.",
+        "Acompanhamento do cumprimento do plano de gerenciamento de riscos e acionamento de autoridades competentes em casos de sinistros, conforme legislação vigente.",
+        "Experiência no controle de jornada e velocidade da frota, além de suporte no cadastro de motoristas e veículos e análise de agregados.",
+        "Utilização da ferramenta Onix – New Enterprise Trucks Control para gestão e acompanhamento operacional."
+      ]
+    },
+    {
+      empresa: "Mobyan",
+      cargo: "Auxiliar de Operações Logísticas",
+      periodo: "maio de 2022 - abril de 2023",
+      itens: [
+        "Auxílio no inventário, recebimento, armazenagem, conferência, separação e expedição de materiais.",
+        "Atualização de planilhas com informações de coletas e entregas realizadas.",
+        "Garantir a execução dos serviços de manutenção relacionadas à qualidade do ambiente.",
+        "Elaboração e controle de atividades de operações diversas.",
+        "Controle de entrega e substituição de material, conferência de mercadorias."
+      ]
+    },
+    {
+      empresa: "Vit Solo",
+      cargo: "Assistente administrativo",
+      periodo: "setembro de 2011 - março de 2017",
+      itens: [
+        "Atuação no controle de entrada e saída de correspondências e documentos, com organização de arquivos e suporte à rotina administrativa.",
+        "Responsável pelo atendimento telefônico e ao público interno e externo, além da gestão de e-mails e atualização de agenda.",
+        "Experiência no apoio a atividades financeiras, controle de ponto eletrônico e atuação como preposto em audiências trabalhistas.",
+        "Domínio do pacote Microsoft Office e suporte direto à gerência em demandas operacionais.",
+        "Experiência no controle e triagem de bagagens e cargas em operações aeroportuárias, incluindo utilização de leitores de código de barras em voos internacionais.",
+        "Atuação no carregamento e descarregamento de aeronaves, garantindo agilidade e segurança nos processos."
+      ]
+    },
+    {
+      empresa: "Brasil Telecomunicações",
+      cargo: "Suporte ao cliente",
+      periodo: "janeiro de 2010 - agosto de 2011",
+      itens: [
+        "Atuação no atendimento ao cliente e suporte técnico em serviços de TV por assinatura, com foco na resolução de demandas e na qualidade da experiência do usuário.",
+        "Identificação de oportunidades de novas vendas de produtos, atuando como ponto de contato entre o cliente e o consultor de vendas corporativas.",
+        "Apoio ao setor de qualidade, com registro e acompanhamento de reclamações, contribuindo para a melhoria contínua dos serviços."
+      ]
+    },
+    {
+      empresa: "Laboratório Hermes Pardini",
+      cargo: "Digitador",
+      periodo: "julho de 2009 - janeiro de 2010",
+      itens: [
+        "Atividades de complementação diagnóstica, cadastramento de exames, liberação e conferência de laudos com rigoroso controle de exatidão."
+      ]
+    },
+    {
+      empresa: "MGS - Minas Gerais Administração e Serviços S.A.",
+      cargo: "Auxiliar administrativo",
+      periodo: "julho de 2007 - janeiro de 2009",
+      itens: [
+        "Responsável pelo arquivamento interno, envio e recebimento de malotes, controle do estoque de materiais e armazenamento em local específico, registro e controle de bens patrimoniais.",
+        "Fechamento da folha de ponto dos funcionários do setor, abertura de chamados para reparo de equipamentos de informática e atendimento ao público."
+      ]
+    },
+    {
+      empresa: "AeC",
+      cargo: "Atendimento ao cliente",
+      periodo: "dezembro de 2006 - abril de 2007",
+      itens: [
+        "Atendimento e suporte técnico especializado, fornecendo orientações aos clientes e registrando ocorrências no sistema interno com foco em resolução ágil."
+      ]
+    },
+    {
+      empresa: "Grupo Contax",
+      cargo: "Representante de serviços",
+      periodo: "fevereiro de 2001 - janeiro de 2005",
+      itens: [
+        "Atendimento de serviços e reparos, atendimento ao público geral, consulta a arquivos e sistemas corporativos e apoio administrativo a clientes Telemar."
+      ]
+    },
+    {
+      empresa: "Conectel SA",
+      cargo: "Operador de Radio chamadas",
+      periodo: "maio de 1998 - agosto de 1999",
+      itens: [
+        "Atendimento ao cliente, recepção e transmissão de mensagens via pager e conferência de registros de comunicação operacional."
+      ]
+    }
+  ],
+  formacao: [
+    "Pós-Graduação Lato Sensu em Inteligência Artificial Aplicada aos Negócios — Faculdade Líbano (2026 – 2027) - Em andamento",
+    "Curso Superior de Tecnologia (CST) em Comunicação Organizacional — Centro Universitário Una (Conclusão: 2023)",
+    "Ensino Técnico em Mineração — Escola Técnica Politec MG (Conclusão: 2014)"
+  ].join("\n"),
+  habilidades: [
+    "Customer Success e Atendimento ao Cliente",
+    "Customer Experience (CX)",
+    "Resolução de Casos Críticos",
+    "Gestão de SLA, NPS e CSAT",
+    "Salesforce e Zendesk",
+    "Comunicação Institucional",
+    "Rotinas Administrativas e Financeiras",
+    "Ética em Inteligência Artificial (IA)"
+  ],
+  idiomas: "Português nativo"
+};
+
+async function isLinkedInPdf(pdf) {
+  if (!pdf || !pdf.numPages) return false;
+  try {
+    const page1 = await pdf.getPage(1);
+    const content = await page1.getTextContent();
+    const strList = (content.items || []).map((it) => (it.str || "").trim()).filter(Boolean);
+    const fullP1 = strList.join(" ");
+
+    if (/linkedin\.com\/in\/|\(LinkedIn\)/i.test(fullP1)) return true;
+
+    const hasContact = strList.some((s) => /^(Contato|Contact)$/i.test(s));
+    const hasTopSkills = strList.some((s) => /^(Principais compet[êe]ncias|Top Skills)$/i.test(s));
+    const hasExp = strList.some((s) => /^(Experi[êe]ncia|Experience)$/i.test(s));
+    if ((hasContact && hasTopSkills) || (hasContact && hasExp)) return true;
+  } catch (err) {
+    console.warn("Verificação se é PDF LinkedIn:", err);
+  }
+  return false;
+}
+
+async function parseLinkedInPdfDoc(doc) {
+  const pages = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const page = await doc.getPage(i);
+    const content = await page.getTextContent();
+    const items = (content.items || [])
+      .map((it) => ({
+        str: (it.str || "").trim(),
+        x: Math.round(it.transform[4]),
+        y: Math.round(it.transform[5]),
+        h: Math.round(it.height || 10),
+      }))
+      .filter((it) => it.str && it.y > 20 && !/^Page \d+ of \d+$/i.test(it.str));
+    pages.push(items);
+  }
+
+  // 1. Barra lateral (página 1, x < 180)
+  const p1 = pages[0] || [];
+  const sidebarItems = p1.filter((it) => it.x < 180);
+  sidebarItems.sort((a, b) => b.y - a.y);
+
+  const sidebarLines = [];
+  let sY = null;
+  let sLine = "";
+  sidebarItems.forEach((it) => {
+    if (sY !== null && Math.abs(it.y - sY) > 5) {
+      if (sLine) sidebarLines.push(sLine.trim());
+      sLine = "";
+    }
+    sLine += (sLine ? " " : "") + it.str;
+    sY = it.y;
+  });
+  if (sLine) sidebarLines.push(sLine.trim());
+
+  let email = "";
+  let linkedin = "";
+  const habilidades = [];
+  let currentSideSec = "";
+
+  for (let idx = 0; idx < sidebarLines.length; idx++) {
+    const l = sidebarLines[idx];
+    if (/^(contato|contact)$/i.test(l)) { currentSideSec = "contato"; continue; }
+    if (/^(principais\s+compet[êe]ncias|top\s+skills)$/i.test(l)) { currentSideSec = "skills"; continue; }
+    if (/^(certifications|certifica[çc][õo]es)$/i.test(l)) { currentSideSec = "certs"; continue; }
+    if (/^(languages|idiomas)$/i.test(l)) { currentSideSec = "idiomas"; continue; }
+
+    if (currentSideSec === "contato") {
+      if (/@/.test(l) && !email) {
+        const m = l.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
+        if (m) email = m[0];
+      }
+      if (/linkedin\.com/i.test(l)) {
+        let fullLi = l;
+        if (sidebarLines[idx + 1] && !/^(contato|contact|principais|top|certifications|certifica|languages|idiomas)/i.test(sidebarLines[idx + 1])) {
+          fullLi += sidebarLines[idx + 1];
+          idx++;
+        }
+        linkedin = fullLi.replace(/\s*\(LinkedIn\)$/i, "").replace(/^https?:\/\/(www\.)?/i, "").trim();
+      }
+    } else if (currentSideSec === "skills" || currentSideSec === "certs") {
+      let skillItem = l;
+      if (sidebarLines[idx + 1] && /^(ao|de|em|para|com|e|and|of|for|in|with)\b/i.test(sidebarLines[idx + 1])) {
+        skillItem += " " + sidebarLines[idx + 1];
+        idx++;
+      }
+      if (skillItem.length > 2 && skillItem.length < 60) {
+        habilidades.push(skillItem);
+      }
+    }
+  }
+
+  // 2. Coluna Principal (todas as páginas)
+  const mainLines = [];
+  pages.forEach((pItems, pIdx) => {
+    const valid = pIdx === 0 ? pItems.filter((it) => it.x >= 180) : pItems;
+    const yMap = new Map();
+    valid.forEach((it) => {
+      let foundKey = null;
+      for (const k of yMap.keys()) {
+        if (Math.abs(k - it.y) <= 4) { foundKey = k; break; }
+      }
+      const key = foundKey !== null ? foundKey : it.y;
+      if (!yMap.has(key)) yMap.set(key, []);
+      yMap.get(key).push(it);
+    });
+
+    const sortedYs = Array.from(yMap.keys()).sort((a, b) => b - a);
+    sortedYs.forEach((y) => {
+      const itemsInLine = yMap.get(y).sort((a, b) => a.x - b.x);
+      const lineText = itemsInLine.map((it) => it.str).join(" ").trim();
+      if (lineText) mainLines.push(lineText);
+    });
+  });
+
+  // 3. Header, Resumo, Experiência e Formação
+  let nome = "";
+  let headlineParts = [];
+  let cidade = "";
+  let resumoParts = [];
+  const expLines = [];
+  const formLines = [];
+  let stage = "header";
+
+  for (let i = 0; i < mainLines.length; i++) {
+    const l = mainLines[i];
+    if (/^(experi[êe]ncia|experience)$/i.test(l)) { stage = "exp"; continue; }
+    if (/^(forma[çc][ãa]o\s+acad[êe]mica|education)$/i.test(l)) { stage = "form"; continue; }
+
+    if (stage === "header") {
+      if (!nome) { nome = l; continue; }
+      if (/^(resumo|summary|about)$/i.test(l)) { stage = "resumo"; continue; }
+      if (/(?:Brasil|Brazil|,\s*[A-Z]{2}\b|,\s*Minas\s+Gerais|,\s*S[ãa]o\s+Paulo|,\s*Rio)/i.test(l)) {
+        cidade = l;
+      } else {
+        headlineParts.push(l);
+      }
+    } else if (stage === "resumo") {
+      resumoParts.push(l);
+    } else if (stage === "exp") {
+      expLines.push(l);
+    } else if (stage === "form") {
+      formLines.push(l);
+    }
+  }
+
+  const headline = headlineParts.join(" ");
+  const resumo = resumoParts.join(" ");
+
+  // 4. Experiências
+  const dateRangeRe = /^(?:janeiro|fevereiro|mar[çc]o|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro|jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez|january|february|march|april|may|june|july|august|september|october|november|december|\d{4})\b.*?(?:-|a|at[ée]|to)\s*.*?(?:\(.*?\)|presente|o momento|atual|present)?$/i;
+  const isDateLine = (s) => s && dateRangeRe.test(s.trim()) && /(?:19|20)\d{2}/.test(s);
+
+  const isLocationAfterDate = (s) => {
+    if (!s || s.length > 60) return false;
+    if (/[.!?;]$/.test(s)) return false;
+    return /(?:Belo Horizonte|S[ãa]o Paulo|Rio de Janeiro|Curitiba|Bras[íi]lia|Minas Gerais|Brasil|Brazil|Regi[ãa]o|,\s*[A-Z]{2}\b|H[íi]brido|Presencial|Remoto|Hybrid|Remote|On-site)/i.test(s);
+  };
+
+  const experiencias = [];
+  let curExp = null;
+  let curItens = [];
+
+  for (let i = 0; i < expLines.length; i++) {
+    const line = expLines[i];
+    const nextNextIsDate = expLines[i + 2] && isDateLine(expLines[i + 2]);
+
+    if (nextNextIsDate && !isDateLine(line)) {
+      if (curExp) {
+        curExp.itens = curItens.length ? curItens : ["Atuação e principais responsabilidades na função."];
+        experiencias.push(curExp);
+      }
+      const empresa = line;
+      const cargoExp = expLines[i + 1];
+      const periodo = expLines[i + 2].replace(/\s*\([^)]*\)\s*$/, "").trim();
+      curExp = {
+        empresa,
+        cargo: cargoExp,
+        periodo,
+        itens: [],
+      };
+      curItens = [];
+      i += 2;
+      if (expLines[i + 1] && isLocationAfterDate(expLines[i + 1])) {
+        i++;
+      }
+      continue;
+    }
+
+    if (curExp) {
+      curItens.push(line);
+    }
+  }
+
+  if (curExp) {
+    curExp.itens = curItens.length ? curItens : ["Atuação e principais responsabilidades na função."];
+    experiencias.push(curExp);
+  }
+
+  experiencias.forEach((exp) => {
+    const rawParagraph = exp.itens.join(" ");
+    const sentences = rawParagraph
+      .split(/(?<=[.!?])\s+/)
+      .map((s) => s.trim().replace(/^[\-•·●]\s*/, ""))
+      .filter((s) => s.length > 20);
+    exp.itens = sentences.length ? sentences : [rawParagraph || "Atuação e principais responsabilidades na função."];
+  });
+
+  // Cargo prioritário: cargo mais recente ou derivado do headline
+  let cargo = "";
+  if (experiencias.length && experiencias[0].cargo) {
+    cargo = experiencias[0].cargo;
+  } else if (headline) {
+    const tokens = headline.split(/\s*\|\s*/).map((s) => s.trim()).filter(Boolean);
+    const cargoCandidate = tokens.find((t) => /\b(assistente|analista|gerente|coordenador|operador|especialista|desenvolvedor|supervisor|agente|agent|diretor|consultor)\b/i.test(t));
+    cargo = cargoCandidate || tokens[0] || "Profissional";
+  }
+
+  // 5. Formação Acadêmica
+  const eduList = [];
+  let curInst = "";
+  let curCourseLines = [];
+
+  const flushEdu = () => {
+    if (curInst && curCourseLines.length) {
+      const fullCourseStr = curCourseLines.join(" ");
+      const periodMatch = fullCourseStr.match(/\s*·\s*\(([^)]+)\)$|\s*\(([^)]*(?:19|20)\d{2}[^)]*)\)$/);
+      let periodoTxt = "";
+      let courseName = fullCourseStr;
+      if (periodMatch) {
+        courseName = fullCourseStr.slice(0, periodMatch.index).trim();
+        const rawPeriod = (periodMatch[1] || periodMatch[2]).trim();
+        const years = rawPeriod.match(/(?:19|20)\d{2}/g);
+        if (years && years.length >= 2) {
+          const endYear = parseInt(years[years.length - 1], 10);
+          const currentYear = new Date().getFullYear();
+          if (endYear > currentYear) {
+            periodoTxt = `(${years[0]} – ${endYear}) - Em andamento`;
+          } else {
+            periodoTxt = `(Conclusão: ${endYear})`;
+          }
+        } else if (years && years.length === 1) {
+          periodoTxt = `(Conclusão: ${years[0]})`;
+        }
+      }
+      eduList.push(`${courseName} — ${curInst}${periodoTxt ? " " + periodoTxt : ""}`.trim());
+    } else if (curInst) {
+      eduList.push(curInst);
+    }
+    curInst = "";
+    curCourseLines = [];
+  };
+
+  const isInstitutionLine = (s) => {
+    if (!s || s.length > 70) return false;
+    if (/(?:gradua[çc]|ensino|curso|bacharel|licenciatura|tecnol|p[óo]s|mestrado|doutorado|·|\(|\)|de\s+(?:19|20)\d{2}|(?:\d{4}))/i.test(s)) return false;
+    return /^[A-ZÀ-Ý0-9]/.test(s);
+  };
+
+  formLines.forEach((l) => {
+    if (isInstitutionLine(l)) {
+      flushEdu();
+      curInst = l;
+    } else if (curInst) {
+      curCourseLines.push(l);
+    }
+  });
+  flushEdu();
+
+  return {
+    nome: nome || "Profissional",
+    cargo: cargo || "Profissional",
+    email: email || "",
+    telefone: "",
+    cidade: cidade.replace(/,\s*Brasil$/i, "").trim(),
+    linkedin: linkedin || "",
+    resumo: resumo || "",
+    experiencias,
+    formacao: eduList.join("\n"),
+    habilidades: [...new Set(habilidades)],
+    idiomas: "Português nativo",
+  };
+}
+
 // ---------- Extração Real de Arquivos (PDF, DOCX, DOC, TXT) + IA Gemini ----------
 function extractTextFromPDFBufferFallback(buf) {
   try {
@@ -1558,15 +1982,42 @@ async function processUploadedFile(file, { stayInEditor = false } = {}) {
     const name = file.name.toLowerCase();
     let raw = "";
 
-    if (apiKey && (name.endsWith(".pdf") || file.type.startsWith("image/"))) {
-      if (isEditorScreen && $("#sideAttachSub")) $("#sideAttachSub").textContent = "Analisando com IA Gemini...";
-      if ($("#loadingText")) $("#loadingText").textContent = "Analisando com IA Gemini 3.8 Flash (100% fiel)…";
-      cv = await parseWithGeminiAI(file, apiKey);
-    } else if (name.endsWith(".pdf")) {
-      raw = await extractTextFromPDF(file);
-      if (isEditorScreen && $("#sideAttachSub")) $("#sideAttachSub").textContent = "Organizando dados ATS...";
-      if ($("#loadingText")) $("#loadingText").textContent = "Estruturando 100% das informações para ATS…";
-      cv = apiKey ? await parseWithGeminiAI(raw, apiKey) : parseResumeTextLocally(raw);
+    if (name.endsWith(".pdf")) {
+      let isLi = false;
+      try {
+        if (window.pdfjsLib) {
+          const buf = await file.arrayBuffer();
+          let testPdf = null;
+          try {
+            testPdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+          } catch (e) {
+            testPdf = await window.pdfjsLib.getDocument({ data: buf, disableWorker: true }).promise;
+          }
+          if (testPdf && (await isLinkedInPdf(testPdf))) {
+            isLi = true;
+            if (isEditorScreen && $("#sideAttachSub")) $("#sideAttachSub").textContent = "Lendo perfil do LinkedIn...";
+            if ($("#loadingText")) $("#loadingText").textContent = "Identificando perfil oficial do LinkedIn e montando currículo ATS…";
+            cv = await parseLinkedInPdfDoc(testPdf);
+            state.tpl = "ats";
+            toast("Perfil oficial do LinkedIn identificado e estruturado no modelo ATS! 🚀", 4000);
+          }
+        }
+      } catch (eLi) {
+        console.warn("Verificação rápida do LinkedIn:", eLi);
+      }
+
+      if (!isLi) {
+        if (apiKey) {
+          if (isEditorScreen && $("#sideAttachSub")) $("#sideAttachSub").textContent = "Analisando com IA Gemini...";
+          if ($("#loadingText")) $("#loadingText").textContent = "Analisando com IA Gemini 3.8 Flash (100% fiel)…";
+          cv = await parseWithGeminiAI(file, apiKey);
+        } else {
+          raw = await extractTextFromPDF(file);
+          if (isEditorScreen && $("#sideAttachSub")) $("#sideAttachSub").textContent = "Organizando dados ATS...";
+          if ($("#loadingText")) $("#loadingText").textContent = "Estruturando 100% das informações para ATS…";
+          cv = parseResumeTextLocally(raw);
+        }
+      }
     } else if (name.endsWith(".docx")) {
       raw = await extractTextFromDOCX(file);
       if (isEditorScreen && $("#sideAttachSub")) $("#sideAttachSub").textContent = "Organizando dados ATS...";
@@ -3461,50 +3912,109 @@ if ($("#vagaLoadSampleCvBtn")) {
   });
 }
 
-// ---------- Pacote LinkedIn ----------
+// ---------- Importador e Conversor de Perfil do LinkedIn para ATS ----------
 function renderLinkedIn() {
-  const blocks = [
-    ["Título (Headline)", `${cv.cargo} | ${(cv.habilidades || []).slice(0, 4).join(" • ")} | Foco em resultados e melhoria de processos`, 220],
-    [
-      "Sobre (Resumo em 1ª pessoa)",
-      `${cv.resumo}\n\nPrincipais entregas e resultados:\n${cv.experiencias
-        .flatMap((x) => x.itens)
-        .slice(0, 4)
-        .map((i) => "✅ " + i)
-        .join("\n")}\n\nPrincipais competências: ${(cv.habilidades || []).join(", ")}.\n\n📩 Aberto(a) a conexões e novas oportunidades na área de ${cv.cargo}.`,
-      2600,
-    ],
-    ...cv.experiencias.map((x) => [`Experiência — ${x.empresa}`, `${x.cargo}\nPeríodo: ${x.periodo}\n\n${(x.itens || []).map((i) => "• " + i).join("\n")}`, 2000]),
-    ["Competências para cadastrar no perfil", (cv.habilidades || []).join("\n"), null],
-    [
-      "Checklist de Perfil Campeão (Dicas Extras)",
-      "1. URL personalizada: ajuste em 'Editar perfil público e URL' para ficar limpa.\n2. Foto profissional: rosto ocupando 60% do quadro, boa iluminação e fundo neutro.\n3. Selo #OpenToWork: ative visível 'Apenas para recrutadores' especificando o cargo " +
-        cv.cargo +
-        ".",
-      null,
-    ],
-  ];
-  $("#liBlocks").innerHTML = blocks
-    .map(
-      ([title, text, max], i) => `
-    <div class="li-block"><header><h3>${title}</h3><button type="button" class="btn btn-ghost btn-sm" data-copy="li${i}">Copiar</button></header>
-    <pre id="li${i}">${text}</pre>${max ? `<span class="count">${text.length}/${max} caracteres</span>` : ""}</div>`
-    )
-    .join("");
+  const loading = document.getElementById("linkedinLoading");
+  if (loading) loading.hidden = true;
+  const fileInput = document.getElementById("linkedinFile");
+  if (fileInput) fileInput.value = "";
 }
 
-$("#liBlocks").addEventListener("click", (e) => {
-  const b = e.target.closest("[data-copy]");
-  if (!b) return;
-  copyText($("#" + b.dataset.copy).textContent, "Copiado! Cole no seu LinkedIn ✓");
-});
+function setupLinkedInUpload() {
+  const drop = document.getElementById("linkedinDrop");
+  const fileInput = document.getElementById("linkedinFile");
+  const loading = document.getElementById("linkedinLoading");
+  const loadingText = document.getElementById("linkedinLoadingText");
+  const sampleBtn = document.getElementById("linkedinUseSampleBtn");
+  const uploadBannerBtn = document.getElementById("uploadGoLinkedInBtn");
 
-$("#copyAllLiBtn").addEventListener("click", () => {
-  const all = Array.from(document.querySelectorAll("#liBlocks pre"))
-    .map((p) => p.textContent)
-    .join("\n\n---\n\n");
-  copyText(all, "Todo o pacote LinkedIn foi copiado ✓");
-});
+  if (uploadBannerBtn) {
+    uploadBannerBtn.addEventListener("click", () => go("linkedin"));
+  }
+
+  if (sampleBtn) {
+    sampleBtn.addEventListener("click", () => {
+      cv = JSON.parse(JSON.stringify(SAMPLE_LINKEDIN_CV));
+      state.tpl = "ats";
+      polishFullCV(cv);
+      saveCurrentState();
+      toast("Perfil oficial de exemplo do LinkedIn carregado com sucesso no modelo ATS! 🚀", 4000);
+      go("template");
+    });
+  }
+
+  if (drop && fileInput) {
+    drop.addEventListener("click", () => fileInput.click());
+
+    ["dragenter", "dragover"].forEach((evt) => {
+      drop.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        drop.classList.add("over");
+      });
+    });
+
+    ["dragleave", "drop"].forEach((evt) => {
+      drop.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        drop.classList.remove("over");
+      });
+    });
+
+    drop.addEventListener("drop", (e) => {
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) processLinkedInFile(f);
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (f) processLinkedInFile(f);
+      e.target.value = "";
+    });
+  }
+
+  async function processLinkedInFile(file) {
+    if (!file || !file.name.toLowerCase().endsWith(".pdf")) {
+      toast("Por favor, selecione um arquivo no formato PDF oficial salvo do LinkedIn.", 4000);
+      return;
+    }
+
+    if (loading) loading.hidden = false;
+    if (loadingText) loadingText.textContent = `Lendo PDF do LinkedIn ("${file.name}")...`;
+
+    try {
+      if (!window.pdfjsLib) throw new Error("Biblioteca de PDF não carregada.");
+      const buf = await file.arrayBuffer();
+      let pdfDoc = null;
+      try {
+        pdfDoc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+      } catch (err1) {
+        pdfDoc = await window.pdfjsLib.getDocument({ data: buf, disableWorker: true }).promise;
+      }
+
+      if (loadingText) loadingText.textContent = "Extraindo 100% das experiências e formação acadêmica...";
+      const parsed = await parseLinkedInPdfDoc(pdfDoc);
+
+      if (!parsed || (!parsed.nome && !parsed.experiencias.length)) {
+        throw new Error("Não foi possível identificar os dados do LinkedIn.");
+      }
+
+      cv = parsed;
+      state.tpl = "ats"; // Define o modelo ATS como padrão
+      polishFullCV(cv);
+      saveCurrentState();
+
+      if (loading) loading.hidden = true;
+      toast("Perfil do LinkedIn importado e estruturado em ATS com 100% de precisão! 🚀", 4500);
+      go("template");
+    } catch (err) {
+      console.error("Erro ao importar PDF do LinkedIn:", err);
+      if (loading) loading.hidden = true;
+      toast("Não foi possível processar este arquivo PDF. Verifique se é o PDF oficial salvo do LinkedIn.", 5000);
+    }
+  }
+}
 
 // ---------- Pacote Currículo Lattes Oficial (CNPq - https://lattes.cnpq.br/) ----------
 function renderLattesPage() {
@@ -4832,6 +5342,7 @@ try {
   polishFullCV(cv);
   saveCurrentState();
   initAuthAndDashboard();
+  setupLinkedInUpload();
 } catch (err) {
   console.warn("Init polish:", err);
 }
