@@ -378,7 +378,55 @@ function extractCityStateFromText(text, headerLines, phone) {
   return "";
 }
 
+function stripAllBullets(str) {
+  if (!str || typeof str !== "string") return "";
+  return str
+    .replace(/^[•●○◦▪▫■□◆◇►▸▶➢➤✓✔·*\-\s]+|[•●○◦▪▫■□◆◇►▸▶➢➤✓✔·*\-\s]+$/g, "")
+    .replace(/^[\s,;·—–\-|]+|[\s,;·—–\-|]+$/g, "")
+    .trim();
+}
+
+function splitEducationItems(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) {
+    return raw.map((s) => stripAllBullets(s)).filter(Boolean);
+  }
+  let str = String(raw).trim();
+  const chunks = str
+    .split(/\n+|[\s·|•●○▫■]\s*[•●○▫■]\s*|\s*;\s*(?=[A-ZÀ-Ý0-9])|\s+[·|]\s+(?=(?:gradua[çc][ãa]o|p[óo]s|mestrado|doutorado|ensino|curso|bacharel|licenciatura|tecnol))/i)
+    .map((s) => stripAllBullets(s))
+    .filter(Boolean);
+
+  const degreeStartRegex = /^(?:•|●|○|▪|▫|■|\*|-)?\s*(?:p[óo]s-?gradua[çc][ãa]o|gradua[çc][ãa]o|bacharel(?:ado)?|licenciatura|curso\s+superior|cst\b|tecn[óo]log[oia]|ensino\s+(?:m[ée]dio|superior|fundamental|t[ée]cnico)|t[ée]cnico\s+em|mestrado|doutorado|especializa[çc][ãa]o|mba\b|formado\b|forma[çc][ãa]o)/i;
+  const merged = [];
+  chunks.forEach((item) => {
+    let line = item.replace(/\s+·\s+/g, " ");
+    if (merged.length > 0 && !degreeStartRegex.test(line)) {
+      const prev = merged[merged.length - 1];
+      if (/[\s—–\-,/:(]+$/.test(prev) || !/\((?:19|20)\d{2}|conclus[ãa]o|\d{4}\b/i.test(prev)) {
+        merged[merged.length - 1] = (prev.replace(/[\s—–\-,/:(]+$/, "").trim() + " — " + line).replace(/\s+—\s+—\s+/g, " — ");
+        return;
+      }
+    }
+    merged.push(line);
+  });
+  return merged.length ? merged : [str];
+}
+
 function polishFullCV(targetCv) {
+  if (!targetCv || typeof targetCv !== "object") return 0;
+  if (Array.isArray(targetCv.habilidades)) {
+    targetCv.habilidades = targetCv.habilidades
+      .map((h) => stripAllBullets(h))
+      .filter((h) => h && h.length > 1 && h.length < 60);
+  }
+  if (targetCv.experiencias && Array.isArray(targetCv.experiencias)) {
+    targetCv.experiencias.forEach((exp) => {
+      if (Array.isArray(exp.itens)) {
+        exp.itens = exp.itens.map((it) => stripAllBullets(it)).filter(Boolean);
+      }
+    });
+  }
   return 0;
 }
 
@@ -1372,7 +1420,17 @@ function parseResumeTextLocally(rawText) {
     cargo = experiencias[experiencias.length - 1].cargo || experiencias[0].cargo;
   }
 
-  const habRaw = sections.hab.join(", ").split(/[,•·;|]|\n/).map((s) => s.trim()).filter((s) => s.length > 1 && s.length < 45);
+  const habRaw = sections.hab
+    .join("\n")
+    .split(/[\n,;|]|\s*[•●○◦▪▫■□◆◇►▸▶➢➤✓✔*·]\s*/)
+    .map((s) => stripAllBullets(s))
+    .filter((s) => s.length > 2 && s.length < 55 && !dividerOnlyRe.test(s));
+
+  // Limpa linhas de divisores que possam ter entrado no resumo
+  const cleanResumoLines = sections.resumo.filter((l) => !dividerOnlyRe.test(l.trim()));
+  const finalResumo = cleanResumoLines.join(" ").trim() ||
+    sections.header.filter((l) => l.length > 50 && !dividerOnlyRe.test(l.trim())).join(" ").trim() ||
+    `Profissional atuando como ${cargo || "especialista"}, com foco em resultados, organização e melhoria contínua.`;
 
   const parsedResult = {
     nome,
@@ -1381,9 +1439,9 @@ function parseResumeTextLocally(rawText) {
     telefone: phone || "",
     cidade: cidade || "",
     linkedin: liMatch ? liMatch[0].replace(/^https?:\/\/(www\.)?/, "") : "linkedin.com/in/seuperfil",
-    resumo: sections.resumo.join(" ") || sections.header.filter((l) => l.length > 50).join(" ") || `Profissional atuando como ${cargo || "especialista"}, com foco em resultados, organização e melhoria contínua.`,
+    resumo: finalResumo,
     experiencias,
-    formacao: sections.form.join(" · ") || "Informe sua formação acadêmica e ano de conclusão",
+    formacao: sections.form.join("\n") || "Informe sua formação acadêmica e ano de conclusão",
     habilidades: habRaw.length ? [...new Set(habRaw)].slice(0, 15) : ["Comunicação", "Organização", "Trabalho em equipe", "Resolução de problemas"],
     idiomas: sections.idi.join(" · ") || "Português nativo",
     lattes: [lattesMatch ? lattesMatch[0] : "", orcidMatch ? orcidMatch[0] : ""].filter(Boolean).join(" | "),
@@ -2058,7 +2116,7 @@ const FIELDS_CORP = [
   ["linkedin", "URL do LinkedIn", false, "Ex.: linkedin.com/in/seunome"],
   ["lattes", "Link do Currículo Lattes ou Portfólio (opcional)", true, "Ex.: http://lattes.cnpq.br/..."],
   ["resumo", "Resumo profissional (suas principais competências e tempo de experiência)", true, "Ex.: Profissional com 5 anos de experiência na área..."],
-  ["formacao", "Formação Acadêmica e Cursos Relevantes", true, "Ex.: Bacharelado em Administração — USP (2019–2023)"],
+  ["formacao", "Formação Acadêmica e Cursos Relevantes (um por linha)", true, "Ex.: Pós-Graduação em Gestão — FGV (2024)\nBacharelado em Administração — USP (2019–2023)"],
   ["publicacoes", "Certificações, Projetos ou Publicações (opcional)", true, "Ex.: Certificação PMP, Artigos ou Projetos relevantes..."],
   ["idiomas", "Idiomas e Nível", true, "Ex.: Inglês intermediário · Espanhol básico"],
 ];
@@ -2549,9 +2607,10 @@ function renderCV() {
     .join("");
 
   const hitSet = new Set(state.matchedKeywords.map((k) => k.toLowerCase()));
-  const skills = `<div class="skills">${(cv.habilidades || [])
-    .map((h) => `<span class="${hitSet.has(h.toLowerCase()) ? "kw-hit" : ""}">${h}</span>`)
-    .join("")}</div>`;
+  const cleanSkills = (cv.habilidades || []).map((h) => stripAllBullets(h)).filter(Boolean);
+  const skills = `<ul class="skills-list">${cleanSkills
+    .map((h) => `<li class="${hitSet.has(h.toLowerCase()) ? "kw-hit" : ""}">${h}</li>`)
+    .join("")}</ul>`;
 
   const lattesLine =
     state.tpl === "academico" && cv.lattes
@@ -2567,7 +2626,10 @@ function renderCV() {
       : "";
 
   const color = state.tpl === "ats" || state.tpl === "internacional" ? "#111" : state.color;
-  const formHTML = `<h2>${L.form}</h2><p>${cv.formacao}</p>`;
+  const eduItems = splitEducationItems(cv.formacao);
+  const formHTML = eduItems.length
+    ? `<h2>${L.form}</h2><ul class="edu-list">${eduItems.map((it) => `<li>${it}</li>`).join("")}</ul>`
+    : `<h2>${L.form}</h2><p>${cv.formacao || ""}</p>`;
   const expHTML = `<h2>${L.exp}</h2>${exp}`;
   const habHTML = `<h2>${L.hab}</h2>${skills}`;
 
@@ -2877,10 +2939,14 @@ function downloadATSPDF() {
   });
   if (!acad) {
     head(en ? "Education" : "Formação Acadêmica");
-    text(cv.formacao);
+    splitEducationItems(cv.formacao).forEach((item) => {
+      text("• " + item, { indent: 3, gap: 0.8 });
+    });
   }
   head(en ? "Skills" : acad ? "Metodologias, Ferramentas e Competências" : "Habilidades");
-  text((cv.habilidades || []).join(", "));
+  (cv.habilidades || []).map((h) => stripAllBullets(h)).filter(Boolean).forEach((h) => {
+    text("• " + h, { indent: 3, gap: 0.8 });
+  });
   head(en ? "Languages" : acad ? "Proficiência em Idiomas" : "Idiomas");
   text(cv.idiomas);
   if (state.watermark) {
@@ -2926,7 +2992,9 @@ async function downloadDOCX() {
   ]);
   const form = [
     H(L[2]),
-    P(cv.formacao),
+    ...splitEducationItems(cv.formacao).map(
+      (item) => new Paragraph({ bullet: { level: 0 }, children: [new TextRun({ text: item, font, size: 21 })] })
+    ),
     ...(acad && cv.formacaoComplementar
       ? [
           H("Formação Complementar e Cursos de Extensão"),
@@ -3044,7 +3112,9 @@ async function downloadDOCX() {
           P(acad ? formatToLattes3rdPerson(cv.resumo, cv) : cv.resumo),
           ...(state.tpl === "primeiro" || acad ? [...form, ...projSec, ...pubSec, ...evSec, ...expSec] : [...expSec, ...form]),
           H(L[3]),
-          P((cv.habilidades || []).join(" • ")),
+          ...(cv.habilidades || []).map(stripAllBullets).filter(Boolean).map(
+            (h) => new Paragraph({ bullet: { level: 0 }, children: [new TextRun({ text: h, font, size: 21 })] })
+          ),
           H(L[4]),
           P(cv.idiomas),
           ...(state.watermark
@@ -3449,20 +3519,50 @@ if ($("#viewLattesModelBtn")) {
 
 // ---------- Carta de Apresentação e E-mail ----------
 function renderCarta() {
-  const topBullet = (cv.experiencias[0] && cv.experiencias[0].itens[0]) || "sólida experiência prática na área";
+  const cleanSkills = (cv.habilidades || []).map(stripAllBullets).filter(Boolean);
+  const topSkills = cleanSkills.slice(0, 3);
+  const skillsPhrase = topSkills.length ? topSkills.join(", ") : "Customer Experience, Atendimento e Operações";
+
+  let topBullet = "";
+  if (cv.experiencias && cv.experiencias[0] && cv.experiencias[0].itens && cv.experiencias[0].itens[0]) {
+    topBullet = stripAllBullets(cv.experiencias[0].itens[0]);
+    if (topBullet.length > 120) {
+      const match = topBullet.match(/^([^.;,]+[.;,])/);
+      if (match && match[1].length > 35) topBullet = match[1].trim();
+      else topBullet = topBullet.slice(0, 110).trim() + "...";
+    }
+  }
+
+  const dividerOnlyRe = /^(?:fun[çc][õo]es?\s+exercidas?|cargos?\s+exercidos?|cargos?\s+pretendidos?|principais\s+atividades?|atividades?\s+desempenhadas?|atribui[çc][õo]es|responsabilidades?|principais\s+compet[êe]ncias|compet[êe]ncias(?:\s+t[ée]cnicas)?|habilidades|resumo\s+das\s+atividades|experi[êe]ncias?\s+anteriores?|outras\s+experi[êe]ncias?|hist[óo]rico(?:\s+profissional)?|demais\s+experi[êe]ncias?)\s*[:\-]?$/i;
+
+  let resumeSnippet = "";
+  if (cv.resumo) {
+    const cleanLines = cv.resumo
+      .replace(/PRINCIPAIS\s+COMPET[ÊE]NCIAS.*$/is, "")
+      .replace(/COMPET[ÊE]NCIAS\s+T[ÉE]CNICAS.*$/is, "")
+      .replace(/SISTEMAS\s+&\s+PLATAFORMAS.*$/is, "")
+      .split(/(?<=[.!?])\s+/)
+      .map((s) => stripAllBullets(s))
+      .filter((s) => s.length > 20 && !dividerOnlyRe.test(s));
+    resumeSnippet = cleanLines.slice(0, 2).join(" ");
+  }
+  if (!resumeSnippet) {
+    resumeSnippet = `Possuo sólida vivência profissional atuando como ${cv.cargo || "especialista"}, desenvolvendo atividades com foco em eficiência operacional, qualidade e alcance de metas.`;
+  }
+
+  const empresaRecent = cv.experiencias && cv.experiencias[0] && cv.experiencias[0].empresa ? cv.experiencias[0].empresa : "";
+  const letterSkills = cleanSkills.slice(0, 4).join(", ") || "comunicação interpessoal, resolução assertiva de problemas e foco no cliente";
+  const contactLine = [cv.telefone, cv.email, cv.linkedin].filter(Boolean).join(" | ");
+
   const blocks = [
-    ["Assunto do E-mail", `Candidatura à vaga de ${cv.cargo} — ${cv.nome}`],
+    ["Assunto do E-mail", `Candidatura à vaga de ${cv.cargo || "Oportunidade"} — ${cv.nome || "Candidato"}`],
     [
       "Corpo do E-mail (curto e direto para recrutadores)",
-      `Olá, equipe de Recrutamento e Seleção,\n\nEncaminho em anexo meu currículo para avaliação na oportunidade de ${cv.cargo}.\n\nPossuo experiência sólida em ${(cv.habilidades || [])
-        .slice(0, 3)
-        .join(", ")}, tendo alcançado resultados práticos como: "${topBullet}".\n\nFico à disposição para uma entrevista.\n\nAtenciosamente,\n${cv.nome}\n${cv.telefone} | ${cv.email}\n${cv.linkedin}`,
+      `Olá, equipe de Recrutamento e Seleção,\n\nEncaminho em anexo meu currículo para avaliação na oportunidade de ${cv.cargo || "especialista"}.\n\nPossuo experiência sólida com foco em ${skillsPhrase}${topBullet ? `, tendo alcançado resultados práticos em: "${topBullet}"` : ""}.\n\nFico à disposição para uma entrevista.\n\nAtenciosamente,\n${cv.nome || ""}\n${contactLine}`,
     ],
     [
       "Carta de Apresentação Completa (para portais de vagas)",
-      `Prezado(a) Gestor(a) de Contratação,\n\nApresento minha candidatura para a posição de ${cv.cargo}. ${cv.resumo}\n\nAo longo da minha trajetória na ${
-        cv.experiencias[0] ? cv.experiencias[0].empresa : "minha área"
-      }, desenvolvi forte domínio em ${(cv.habilidades || []).join(", ")}, sempre com foco em eficiência operacional e entrega de resultados mensuráveis.\n\nAgradeço a atenção e coloco-me à disposição para detalhar como posso contribuir com as metas da equipe.\n\nCordialmente,\n${cv.nome}`,
+      `Prezado(a) Gestor(a) de Contratação,\n\nApresento minha candidatura para a posição de ${cv.cargo || "sua equipe"}.\n\n${resumeSnippet}\n\nAo longo da minha trajetória${empresaRecent ? ` (com atuação na ${empresaRecent})` : ""}, desenvolvi forte domínio em ${letterSkills}, sempre com foco em melhoria contínua, colaboração em equipe e entrega de resultados consistentes.\n\nAgradeço a atenção e coloco-me à disposição para detalhar como posso contribuir com as metas da organização.\n\nCordialmente,\n${cv.nome || ""}\n${contactLine}`,
     ],
   ];
   $("#cartaBlocks").innerHTML = blocks
@@ -4448,15 +4548,20 @@ function initAuthAndDashboard() {
       localStorage.removeItem("aprovado_user_provider");
       if (emailInput) emailInput.value = "";
       updateUserDisplay();
-      toast("Conta desconectada. Você pode entrar com outro e-mail ou rede social.");
+      toast("Você saiu da sua conta com sucesso. 🚪");
     });
   }
 
   const dashSwitchBtn = document.getElementById("dashSwitchAccountBtn");
   if (dashSwitchBtn) {
     dashSwitchBtn.addEventListener("click", () => {
+      localStorage.removeItem("aprovado_user_email");
+      localStorage.removeItem("aprovado_user_name");
+      localStorage.removeItem("aprovado_user_provider");
+      if (emailInput) emailInput.value = "";
+      updateUserDisplay();
       go("auth");
-      toast("Gerencie ou troque sua conta abaixo.");
+      toast("Você saiu da sua conta com sucesso. 🚪");
     });
   }
 
